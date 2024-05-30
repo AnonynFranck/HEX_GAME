@@ -12,7 +12,7 @@ class Renderer:
     RED_PIECE_COLOR = pygame.Color(255, 0, 0)
     BLUE_PIECE_COLOR = pygame.Color(0, 0, 255)
 
-    def __init__(self, difficulty):
+    def __init__(self, difficulty, default_width, default_height):
         pygame.init()
         self.graphic_size = 70  # Tamaño de cada hexágono
         self.map_type = "HEX"  # Tipo de mapa: HEX
@@ -47,6 +47,10 @@ class Renderer:
         elif difficulty == "Hard (Monte Carlo Tree Search)":
             self.ai_player = HardAIPlayer(self)
     
+        #self.window_width = default_width
+        #self.window_height = default_height
+        self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
+
     def get_map_size_pixels(self, map_size):
         g = self.graphic_size
         w = map_size[0]
@@ -160,14 +164,18 @@ class Renderer:
         self.screen.blit(difficulty_text, (10, 10))
         pygame.display.flip()
     
+
     def handle_mouse_click(self, pos):
         x, y = self.convert_pixel_to_hex_coords(pos)
-        if self.is_valid_hex_coords(x, y):
+        if self.is_valid_hex_coords(x, y) and (x, y) not in self.occupied_positions:
             if self.current_player == "red":
                 self.red_player_positions.add((x, y))
             else:
                 self.blue_player_positions.add((x, y))
+            self.occupied_positions.add((x, y))  # Agregar la posición al conjunto de posiciones ocupadas
             self.current_player = "blue" if self.current_player == "red" else "red"
+        # else:
+        #    print("POSTION OCCUPIED")
 
     def print_player_positions(self):
         print("Posiciones del jugador rojo:")
@@ -177,7 +185,7 @@ class Renderer:
         for pos in self.blue_player_positions:
             print(pos)
 
-    def run(self):
+    def run(self, show_difficulty_menu):
         path = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0)]
         running = True
         while running:
@@ -189,6 +197,9 @@ class Renderer:
                         running = False
                         pygame.quit()
                         sys.exit()
+                    elif event.key == pygame.K_r:
+                        running = False
+                        show_difficulty_menu()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_mouse_click(event.pos)
 

@@ -1,2 +1,2 @@
-# Ideas en decadencia @gg
+# GO ideas
 ![Ideas](images/swapy.png).xd

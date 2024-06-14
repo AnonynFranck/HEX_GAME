@@ -2,21 +2,23 @@ import pygame
 from AIeasy import EasyAIPlayer
 from AInormal import NormalAIPlayer
 from AIhard import HardAIPlayer
-import sys
+
+from DisjointSet import DisjointSetWeighted
+
 
 class Renderer:
     START_HEX_COLOR = pygame.Color(0, 255, 0)
     END_HEX_COLOR = pygame.Color(255, 0, 0)
     BARRIER_COLOR = pygame.Color(0, 0, 255)
-    # Changue
+    # Cambiado
     RED_PIECE_COLOR = pygame.Color(255, 0, 0)
     BLUE_PIECE_COLOR = pygame.Color(0, 0, 255)
 
     def __init__(self, difficulty, default_width, default_height):
         pygame.init()
-        self.graphic_size = 70  # Tamaño de cada hexágono
-        self.map_type = "HEX"  # Tipo de mapa: HEX
-        self.map_size = (11, 11)  # Dimensiones del tablero: 11x11
+        self.graphic_size = 70
+        self.map_type = "HEX"
+        self.map_size = (11, 11)
 
         create_graphic = self.create_hex_gfx
         self.render = self.render_hex_map
@@ -38,7 +40,11 @@ class Renderer:
         self.blue_player_positions = set()
         self.current_player = "red"
         self.difficulty = difficulty
-        self.font = pygame.font.Font("fonts/mytype.ttf",48)
+        self.font = pygame.font.Font("fonts/mytype.ttf", 48)
+
+        # Disjoint set
+        self.red_player_disjoint_set = DisjointSetWeighted(self.map_size[0] * self.map_size[1])
+        self.blue_player_disjoint_set = DisjointSetWeighted(self.map_size[0] * self.map_size[1])
 
         if difficulty == "Easy (BFS)":
             self.ai_player = EasyAIPlayer(self)
@@ -46,9 +52,9 @@ class Renderer:
             self.ai_player = NormalAIPlayer(self)
         elif difficulty == "Hard (Monte Carlo Tree Search)":
             self.ai_player = HardAIPlayer(self)
-    
-        #self.window_width = default_width
-        #self.window_height = default_height
+
+        # self.window_width = default_width
+        # self.window_height = default_height
         self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
 
     def get_map_size_pixels(self, map_size):
@@ -94,7 +100,7 @@ class Renderer:
 
         s.set_colorkey(magenta)
         return s
-    
+
     def convert_pixel_to_hex_coords(self, pos):
         g = self.graphic_size
         board_width, board_height = self.get_map_size_pixels(self.map_size)
@@ -105,109 +111,143 @@ class Renderer:
         x_pos -= board_x
         y_pos -= board_y
 
-        y = y_pos // (g * 0.75)
-        x = (x_pos - y * (g // 2)) // g
-
+        y = int(y_pos // (g * 0.75))
+        x = int((x_pos - (0.5 * g * (y % 2))) // g)
+        if x < 0 or y < 0 or x >= self.map_size[0] or y >= self.map_size[1]:
+            return None
         return x, y
-    def is_valid_hex_coords(self, x, y):
-        m_width, m_height = self.map_size
-        return 0 <= x < m_width and 0 <= y < m_height
-    
-    def convert_hex_to_pixel_coords(self, x, y):
+
+    def convert_hex_to_pixel_coords(self, pos):
+        g = self.graphic_size
+        x, y = pos
+
+        x_off = (y % 2) * (g / 2)
+        x_pix = (x * g) + x_off
+        y_pix = y * (g * 0.75)
+
+        return x_pix, y_pix
+
+    def render_hex_map(self, map_data):
         g = self.graphic_size
         board_width, board_height = self.get_map_size_pixels(self.map_size)
         board_x = (self.window_width - board_width) // 2
         board_y = (self.window_height - board_height) // 2
 
-        x_blit = board_x + (x * g) + (g // 2 * (y % 2))
-        y_blit = board_y + (y * g * 0.75)
+        self.screen.fill((0, 0, 0))
 
-        return x_blit, y_blit
-    
-    def render_hex_map(self, path):
-        g = self.graphic_size
-        m_width, m_height = self.map_size
+        for y in range(self.map_size[1]):
+            for x in range(self.map_size[0]):
+                p_x, p_y = self.convert_hex_to_pixel_coords((x, y))
 
-        magenta = pygame.Color(255, 0, 255)
+                p_x += board_x
+                p_y += board_y
 
-        b = pygame.Surface((self.window_width, self.window_height))
-        b.fill(magenta)
-        b.set_colorkey(magenta)
+                gfx = self.empty_node_gfx
 
-        board_width, board_height = self.get_map_size_pixels(self.map_size)
-        board_x = (self.window_width - board_width) // 2
-        board_y = (self.window_height - board_height) // 2
+                if map_data[y][x] == "S":
+                    gfx = self.start_node_gfx
+                elif map_data[y][x] == "E":
+                    gfx = self.end_node_gfx
+                elif map_data[y][x] == "B":
+                    gfx = self.barrier_node_gfx
+                elif map_data[y][x] == "R":
+                    gfx = self.red_piece_gfx
+                elif map_data[y][x] == "BL":
+                    gfx = self.blue_piece_gfx
 
-        for y in range(m_height):
-            offset = y // 2
-            for x in range(m_width):
-                x_blit = board_x + (x * g) + (offset * g)
-                y_blit = board_y + (y * g)
+                self.screen.blit(gfx, (p_x, p_y))
 
-                if y % 2 != 0:
-                    x_blit += (g / 2)
+    def update_disjoint_set(self, disjoint_set, x, y, player):
+        def hex_to_index(x, y):
+            return y * self.map_size[0] + x
 
-                if y > 0:
-                    y_blit -= ((g / 4) + 1) * y
+        index = hex_to_index(x, y)
+        disjoint_set.union(index, index)  # Union with itself to add the node
 
-                if (x, y) in self.red_player_positions:
-                    b.blit(self.red_piece_gfx, (x_blit, y_blit))
-                elif (x, y) in self.blue_player_positions:
-                    b.blit(self.blue_piece_gfx, (x_blit, y_blit))
-                elif (x, y) in path:
-                    b.blit(self.start_node_gfx, (x_blit, y_blit))
-                else:
-                    b.blit(self.empty_node_gfx, (x_blit, y_blit))
+        print(f"Updating disjoint set for {player} at ({x}, {y})")
 
-        difficulty_text = self.font.render(self.difficulty, True, (255, 255, 255))
-        self.screen.blit(b, (0, 0))
-        self.screen.blit(difficulty_text, (10, 10))
-        pygame.display.flip()
-    
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, 1), (1, -1)]:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < self.map_size[0] and 0 <= ny < self.map_size[1]:
+                neighbor_index = hex_to_index(nx, ny)
+                if player == "red" and (nx, ny) in self.red_player_positions:
+                    print(f"Union red ({x}, {y}) with ({nx, ny})")
+                    disjoint_set.union(index, neighbor_index)
+                elif player == "blue" and (nx, ny) in self.blue_player_positions:
+                    print(f"Union blue ({x}, {y}) with ({nx, ny})")
+                    disjoint_set.union(index, neighbor_index)
 
-    def handle_mouse_click(self, pos):
-        x, y = self.convert_pixel_to_hex_coords(pos)
-        if self.is_valid_hex_coords(x, y) and (x, y) not in self.occupied_positions:
-            if self.current_player == "red":
-                self.red_player_positions.add((x, y))
-            else:
-                self.blue_player_positions.add((x, y))
-            self.occupied_positions.add((x, y))  # Agregar la posición al conjunto de posiciones ocupadas
-            self.current_player = "blue" if self.current_player == "red" else "red"
-        # else:
-        #    print("POSTION OCCUPIED")
+    def check_win(self, disjoint_set, player):
+        if player == "red":
+            for y1 in range(self.map_size[1]):
+                for y2 in range(self.map_size[1]):
+                    if disjoint_set.find(y1 * self.map_size[0]) == disjoint_set.find(
+                            y2 * self.map_size[0] + (self.map_size[0] - 1)):
+                        print(f"Red wins with connection from (0, {y1}) to ({self.map_size[0] - 1}, {y2})")
+                        return True
+        elif player == "blue":
+            for x1 in range(self.map_size[1]):
+                for x2 in range(self.map_size[1]):
+                    if disjoint_set.find(x1 * self.map_size[0]) == disjoint_set.find(
+                            x2 * self.map_size[0] + (self.map_size[0] - 1)):
+                        print(f"Blue wins with connection from ({x1}, 0) to ({x2}, {self.map_size[0] - 1})")
+                        return True
+        return False
 
-    def print_player_positions(self):
-        print("Posiciones del jugador rojo:")
-        for pos in self.red_player_positions:
-            print(pos)
-        print("\nPosiciones del jugador azul:")
-        for pos in self.blue_player_positions:
-            print(pos)
+    def show_disjoint_set(self, player):
+        output_path = f'/HEX_GAME/{player}_player_tree'
+        if player == "red":
+            self.red_player_disjoint_set.save(output_path)
+        elif player == "blue":
+            self.blue_player_disjoint_set.save(output_path)
 
-    def run(self, show_difficulty_menu):
-        path = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0)]
+    def display_turn_info(self):
+        turn_info = f"Turn: {'Red' if self.current_player == 'red' else 'Blue'}"
+        turn_info_text = self.font.render(turn_info, True, (255, 255, 255))
+        turn_info_rect = turn_info_text.get_rect()
+        turn_info_rect.topleft = (10, 10)
+        self.screen.blit(turn_info_text, turn_info_rect)
+
+    def run(self, callback):
+        map_data = [["" for _ in range(self.map_size[0])] for _ in range(self.map_size[1])]
+        clock = pygame.time.Clock()
         running = True
+        winner = None
+
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        running = False
-                        pygame.quit()
-                        sys.exit()
-                    elif event.key == pygame.K_r:
-                        running = False
-                        show_difficulty_menu()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.handle_mouse_click(event.pos)
+                    hex_coords = self.convert_pixel_to_hex_coords(event.pos)
+                    if hex_coords and hex_coords not in self.occupied_positions:
+                        self.occupied_positions.add(hex_coords)
+                        x, y = hex_coords
+                        if self.current_player == "red":
+                            map_data[y][x] = "R"
+                            self.red_player_positions.add((x, y))
+                            print(f"Red player places at ({x}, {y})")
+                            self.update_disjoint_set(self.red_player_disjoint_set, x, y, "red")
+                            if self.check_win(self.red_player_disjoint_set, "red"):
+                                winner = "Red"
+                                running = False
+                            self.current_player = "blue"
+                        elif self.current_player == "blue":
+                            map_data[y][x] = "BL"
+                            self.blue_player_positions.add((x, y))
+                            print(f"Blue player places at ({x}, {y})")
+                            self.update_disjoint_set(self.blue_player_disjoint_set, x, y, "blue")
+                            if self.check_win(self.blue_player_disjoint_set, "blue"):
+                                winner = "Blue"
+                                running = False
+                            self.current_player = "red"
 
-            # Realizar movimiento del bot
-            self.ai_player.make_move()
+            self.render(map_data)
+            self.display_turn_info()
+            pygame.display.flip()
+            clock.tick(30)
 
-            # Show map and print position of the players
-            self.render_hex_map(path)
-            self.print_player_positions()
+        if winner:
+            self.show_disjoint_set(winner)
 
-        pygame.quit()
+        callback()

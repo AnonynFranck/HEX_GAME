@@ -38,7 +38,7 @@ class Renderer:
         self.blue_player_positions = set()
         self.current_player = "red"
         self.difficulty = difficulty
-        self.font = pygame.font.Font("mytype.ttf",48)
+        self.font = pygame.font.Font("fonts/mytype.ttf",48)
 
         if difficulty == "Easy (BFS)":
             self.ai_player = EasyAIPlayer(self)

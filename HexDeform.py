@@ -2,7 +2,7 @@ import pygame
 from AIeasy import EasyAIPlayer
 from AInormal import NormalAIPlayer
 from AIhard import HardAIPlayer
-import DisjointSet
+from DisjointSet import *
 import sys
 
 class Renderer:
@@ -40,6 +40,7 @@ class Renderer:
         self.current_player = "red"
         self.difficulty = difficulty
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
+        self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)
 
         if difficulty == "Easy (BFS)":
             self.ai_player = EasyAIPlayer(self)
@@ -53,8 +54,22 @@ class Renderer:
         self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
 
         self.disjoint_set = DisjointSet(self.map_size) #Inicializando estructura DisjoinSet
+        self.winner = None  # Para almacenar al WINNER
 
+    def draw_current_player(self):
+        if not self.winner:
+            text = self.font.render(f"Turno: {self.current_player}", True, (255, 255, 255))
+            rect = text.get_rect(topright=(self.screen.get_width() - 10, 10))
+            self.screen.blit(text, rect)
 
+    def draw_winner(self, width, height):
+        if self.winner:
+            text = self.font_Cracked.render(f"THE PLAYER {self.winner.upper()} IT'S WINNER!", True, (255, 255, 255))
+            rect = text.get_rect(center=(width, height))
+            self.screen.blit(text, rect)
+            legendText = self.font.render("press 'r' to return menu or 'q' to exit",True, (255, 255, 255))
+            rectL = legendText.get_rect(midbottom=(width, height*2))
+            self.screen.blit(legendText, rectL)
     def get_neighbors(self, x, y):
         # Implementación para obtener los vecinos de un hexágono en las coordenadas (x, y)
         neighbors = []
@@ -176,15 +191,21 @@ class Renderer:
         difficulty_text = self.font.render(self.difficulty, True, (255, 255, 255))
         self.screen.blit(b, (0, 0))
         self.screen.blit(difficulty_text, (10, 10))
+
+        # Show winner
+        self.draw_winner(780, 400)
+
         pygame.display.flip()
     
 
     def handle_mouse_click(self, pos):
+        if self.winner is not None:
+            return
+
         x, y = self.convert_pixel_to_hex_coords(pos)
         if self.is_valid_hex_coords(x, y) and (x, y) not in self.occupied_positions:
             if self.current_player == "red":
                 self.red_player_positions.add((x, y))
-                # Unir con los nodos auxiliares si están en el borde
                 if y == 0:
                     self.disjoint_set.union((x, y), self.disjoint_set.red_top_node)
                 if y == self.map_size[1] - 1:
@@ -194,7 +215,6 @@ class Renderer:
                         self.disjoint_set.union((x, y), neighbor)
             else:
                 self.blue_player_positions.add((x, y))
-                # Unir con los nodos auxiliares si están en el borde
                 if x == 0:
                     self.disjoint_set.union((x, y), self.disjoint_set.blue_left_node)
                 if x == self.map_size[0] - 1:
@@ -206,13 +226,9 @@ class Renderer:
             self.occupied_positions.add((x, y))
             self.current_player = "blue" if self.current_player == "red" else "red"
 
-            winner = self.disjoint_set.check_win()
-            if winner == "red":
-                print("El jugador rojo ha ganado!")
-                exit()
-            elif winner == "blue":
-                print("El jugador azul ha ganado!")
-                exit()
+            self.winner = self.disjoint_set.check_win()
+            if self.winner:
+                print(f"El jugador {self.winner} ha ganado!")
 
     def print_player_positions(self):
         print("Posiciones del jugador rojo:")
@@ -242,9 +258,13 @@ class Renderer:
 
             # Realizar movimiento del bot
             self.ai_player.make_move()
-
+    
             # Show map and print position of the players
             self.render_hex_map(path)
             self.print_player_positions()
+            
+            # Show current player
+            self.screen.fill((0, 0, 0))  # Clean screen
+            self.draw_current_player()
 
         pygame.quit()

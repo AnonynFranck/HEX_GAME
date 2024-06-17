@@ -69,6 +69,7 @@ Por lo tanto, en el peor de los casos, el árbol de decisiones podría tener un 
 Sin embargo, es importante tener en cuenta que este cálculo asume que todas las jugadas son posibles y que no se consideran las reglas del juego Hex, que implican la formación de cadenas ininterrumpidas para conectar los lados opuestos.
 
 En la práctica, el número real de nodos en el árbol de decisiones será menor, ya que algunas jugadas serán descartadas por ser inválidas o poco prometedoras. Además, el uso del algoritmo de Dijkstra para encontrar la ruta más corta entre las fichas del bot, junto con la poda del árbol de decisiones basada en heurísticas y evaluaciones, reducirá aún más el tamaño efectivo del árbol de decisiones.
+
 ## Propuesta
 
 Se usará DFS en lugar de BFS, ya que, BFS usa una búsqueda por anchura con una cierta eficacia en buscar el camino más corto, algo que a comparación de DFS es mucho más ineficiente, ya que para este caso lo que se busca es evaluar las posibles rutas y escenarios. En hex todos tienen el mismo peso pero mientras se van eliminando los nodos el peso de estos va cambiando.

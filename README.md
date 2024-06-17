@@ -1,12 +1,15 @@
 ---
 title: "HEX GAME"
 author: 
-- Nombre Francko Therey
-- Nombre Luis Enrique
+- Francko Therey
+- Luis Enrique
 date: "16/06/24"
 ---
 
-# UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS
+# HEX GAME
+![HEX GAME](/images/hex.png)
+
+## UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS
 <div align="center">
   <img src="images/upc-logo.png" alt="UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS">
 </div>

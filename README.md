@@ -85,6 +85,13 @@ Además mediante programación dinámica y algoritmos greedy se realizará la po
 
 Hemos utilizado la estructura Disjoints o conjuntos disjuntos para realizar y a su vez detectar las uniones de extremo a extremo con las fichas del jugador correspondiente implementando la finalidad del juego.
 
+También se han empleado funciones de pygame para el dibujo de polígonos y sus contornos como pygame.draw.polygon, tomando como referencia las coordenadas y el tamaño que tendrá cada hexágono. pygame.draw.line() para la creación de las líneas que unen los hexágonos. pygame.display.flip() para mostrar los cambios en la pantalla.
+
+Se diseña el tablero unitariamente cada hexagono con sus respectivas coordenadas como si de un plano cartesiano invertido se tratase tratandolos de manera lógica como si fueran nodos pero representandolos como un tablero de hexágonos.
+
+El uso de una función convert_pixel_to_hex_coords es necesaria para poder aplicar DisjointSet ya que este trabaja con coordenadas. Las coordenadas de cada hexágono se emplean para identificar y manipular los nodos en la estructura de datos del Disjoint Set. Esto en el juego Hex es aplicado en forma de hexágonos que vendrían a ser los nodos.
+
+Además el sistema de turnos está basado en clicks.
 
 ## Bibliografía
 

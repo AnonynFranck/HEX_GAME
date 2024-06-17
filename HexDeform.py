@@ -75,6 +75,7 @@ class Renderer:
             legendText = self.font.render("press 'r' to return menu or 'q' to exit",True, (255, 255, 255))
             rectL = legendText.get_rect(midbottom=(width, height*2))
             self.screen.blit(legendText, rectL)
+
     def get_neighbors(self, x, y):
         # Implementación para obtener los vecinos de un hexágono en las coordenadas (x, y)
         neighbors = []
@@ -143,6 +144,7 @@ class Renderer:
         x = (x_pos - y * (g // 2)) // g
 
         return x, y
+
     def is_valid_hex_coords(self, x, y):
         m_width, m_height = self.map_size
         return 0 <= x < m_width and 0 <= y < m_height
@@ -214,7 +216,13 @@ class Renderer:
                 else:
                     b.blit(self.empty_node_gfx, (x_blit, y_blit))
 
+        difficulty_text = self.font.render(self.difficulty, True, (255, 255, 255))
         self.screen.blit(b, (0, 0))
+        self.screen.blit(difficulty_text, (10, 10))
+
+        # Show winner
+        self.draw_winner(780, 400)
+
         pygame.display.flip()
 
 

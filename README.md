@@ -1,13 +1,16 @@
 ---
 title: "HEX GAME"
 author: 
-- Francko Therey
-- Luis Enrique
-date: "16/06/24"
+  - Francko Therey Ccama Guerra
+  - Luis Enrique Aquije Quiroga
+date: "16/06/2024"
 ---
 
 # HEX GAME
-![HEX GAME](/images/hex.png)
+
+<div align="center">
+  <img src="images/hex.png" alt="HEX GAME" width="200">
+</div>
 
 ## UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS
 <div align="center">

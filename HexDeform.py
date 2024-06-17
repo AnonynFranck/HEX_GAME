@@ -42,7 +42,7 @@ class Renderer:
 
         self.red_player_positions = set()
         self.blue_player_positions = set()
-        self.current_player = "red" # player current
+        self.current_player = "red" # current player
         self.difficulty = difficulty
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)

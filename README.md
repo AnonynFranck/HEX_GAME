@@ -45,38 +45,30 @@ Carnaval Sánchez, Luis Martin
 
 ## Descripción del Problema
 ### Descripción
-[Insertar descripción del problema]
+En el mundo de los juegos de estrategia, como el HEX, la teoría de grafos desempeña un papel crucial, brindando herramientas y técnicas para abordar problemas específicos. Uno de estos desafíos se define como la búsqueda de estrategias óptimas basadas en los resultados del ganador del juego, lo cual está estrechamente relacionado con la búsqueda de caminos o conexiones eficientes en el tablero.
 
-### Fundamentación del Problema
-#### Monte-Carlo Tree Search (MCTS)
-##### Búsqueda Ciega
-[Insertar explicación de Búsqueda Ciega]
+En el juego HEX, los jugadores compiten por conectar los lados opuestos del tablero con sus fichas de color. Este objetivo se puede equiparar al concepto de encontrar el camino más corto entre dos puntos en un grafo, donde cada celda del tablero representa un nodo, y las conexiones entre las celdas adyacentes representan las aristas.
 
-##### Búsqueda Informada
-[Insertar explicación de Búsqueda Informada]
+En este proyecto, nos enfocaremos en el desarrollo de un bot (jugador rojo) que combine el algoritmo de Dijkstra con un árbol de decisiones. Dijkstra se utilizará para encontrar la ruta más corta entre las fichas del jugador, mientras que el árbol de decisiones permitirá al bot evaluar los diferentes escenarios y tomar decisiones estratégicas en cada turno, basándose en las posibles jugadas y sus consecuencias.
 
-##### Greedy
-[Insertar explicación de Greedy]
+Aunque nuestro enfoque principal no será la implementación completa del algoritmo de Monte Carlo Tree Search (MCTS), tomaremos algunas ideas y conceptos clave de este enfoque. Por ejemplo, utilizaremos simulaciones y rollouts para explorar las posibles jugadas y evaluar su efectividad, lo que contribuirá a mejorar la calidad y efectividad del bot en el juego. Por esa razon esta combinación de técnicas proporcionará al bot la capacidad de analizar el tablero de manera eficiente, simular movimientos potenciales y tomar decisiones estratégicas en cada turno, adaptándose a las jugadas del oponente y buscando la conexión ganadora óptima.
 
-##### Programación Dinámica
-[Insertar explicación de Programación Dinámica]
+## Descripción del Conjunto de Datos
+En este proyecto, al utilizar el algoritmo de Dijkstra en conjunto con un árbol de decisiones, podemos estimar el número de posibles resultados o nodos en el árbol de decisiones de la siguiente manera:
 
-##### Divide y Vencerás (D/C) y Backtracking
-[Insertar explicación de Divide y Vencerás y Backtracking]
+* Primero, debemos considerar que el tablero de Hex tiene un tamaño de 11x11, lo que significa que hay un total de $121$ celdas o nodos en el grafo.
+* Para calcular el número máximo de nodos en el árbol de decisiones, podemos suponer que en cada turno, el bot (jugador rojo) tiene la opción de colocar su ficha en cualquiera de las celdas vacías restantes. Esto significa que en el primer turno, el bot tiene 121 opciones diferentes.
+* En el segundo turno, suponiendo que el oponente (jugador azul) también ha colocado una ficha, el bot tendría $119$ opciones ($121 - 2$ fichas colocadas).
+Siguiendo esta lógica, en el turno $t$, el número de opciones disponibles para el bot sería $121 - (2t - 1)$, ya que habrá $(2t - 1)$ fichas colocadas en el tablero ($t$ del bot y $t - 1$ del oponente).
 
-##### Muestreo Aleatorio
-[Insertar explicación de Muestreo Aleatorio]
+Entonces, el número máximo de nodos en el árbol de decisiones sería la suma de las opciones disponibles en cada turno, desde el turno $1$ hasta el turno $60$ (asumiendo que el juego termina cuando todas las $121$ celdas están ocupadas):
 
-#### Dijkstra
-[Insertar explicación de Dijkstra]
+$$Número Máximo Nodos = 121 + 119 + 117 + ... + 3 + 1 = \sum_{t=1}^{60} (121 - 2(t - 1)) = 3721$$
+Por lo tanto, en el peor de los casos, el árbol de decisiones podría tener un máximo de 3721 nodos.
 
-## Descripción y Visualización del Conjunto de Datos
-### Descripción del Conjunto de Datos
-[Insertar descripción del conjunto de datos]
+Sin embargo, es importante tener en cuenta que este cálculo asume que todas las jugadas son posibles y que no se consideran las reglas del juego Hex, que implican la formación de cadenas ininterrumpidas para conectar los lados opuestos.
 
-### Representación mediante Grafos
-[Insertar representación mediante grafos]
-
+En la práctica, el número real de nodos en el árbol de decisiones será menor, ya que algunas jugadas serán descartadas por ser inválidas o poco prometedoras. Además, el uso del algoritmo de Dijkstra para encontrar la ruta más corta entre las fichas del bot, junto con la poda del árbol de decisiones basada en heurísticas y evaluaciones, reducirá aún más el tamaño efectivo del árbol de decisiones.
 ## Propuesta
 [Insertar propuesta y solución planteada]
 

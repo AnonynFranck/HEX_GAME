@@ -14,6 +14,7 @@ class Renderer:
     # Changue
     RED_PIECE_COLOR = pygame.Color(255, 0, 0)
     BLUE_PIECE_COLOR = pygame.Color(0, 0, 255)
+    BORDER_COLOR = pygame.Color(128, 0, 128)  # Color morado
 
     def __init__(self, difficulty, default_width, default_height):
         pygame.init()
@@ -156,7 +157,7 @@ class Renderer:
         y_blit = board_y + (y * g * 0.75)
 
         return x_blit, y_blit
-    
+
     def render_hex_map(self, path_blue, path_red):
         g = self.graphic_size
         m_width, m_height = self.map_size
@@ -195,6 +196,17 @@ class Renderer:
                 points.append((x_blit, y_blit + 3 * quarter))
                 points.append((x_blit, y_blit + quarter))
 
+                if (x == 0 and y != 0 and y != m_height - 1) or (
+                        x == m_width - 1 and y != 0 and y != m_height - 1):  # Extremos verticales sin esquinas
+                    pygame.draw.polygon(b, self.START_HEX_COLOR_BLUE, points)
+                if (y == 0 and x != 0 and x != m_width - 1) or (
+                        y == m_height - 1 and x != 0 and x != m_width - 1):  # Extremos horizontales sin esquinas
+                    pygame.draw.polygon(b, self.START_HEX_COLOR_RED, points)
+
+                if (x == 0 and y == 0) or (x == 0 and y == m_height - 1) or (x == m_width - 1 and y == 0) or (
+                        x == m_width - 1 and y == m_height - 1):  # Esquinas
+                    pygame.draw.polygon(b, self.BORDER_COLOR, points)
+
                 if (x, y) in self.red_player_positions:
                     b.blit(self.red_piece_gfx, (x_blit, y_blit))
                 elif (x, y) in self.blue_player_positions:
@@ -202,20 +214,9 @@ class Renderer:
                 else:
                     b.blit(self.empty_node_gfx, (x_blit, y_blit))
 
-                if x == 0 or x == m_width - 1:  # Extremos verticales
-                    pygame.draw.polygon(b, self.START_HEX_COLOR_BLUE, points, 3)
-                if y == 0 or y == m_height - 1:  # Extremos horizontales
-                    pygame.draw.polygon(b, self.START_HEX_COLOR_RED, points, 3)
-
-        difficulty_text = self.font.render(self.difficulty, True, (255, 255, 255))
         self.screen.blit(b, (0, 0))
-        self.screen.blit(difficulty_text, (10, 10))
-
-        # Show winner
-        self.draw_winner(780, 400)
-
         pygame.display.flip()
-    
+
 
     def handle_mouse_click(self, pos):
         if self.winner is not None:

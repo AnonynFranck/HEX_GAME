@@ -84,15 +84,25 @@ Además mediante programación dinámica y algoritmos greedy se realizará la po
 
 ## Diseño del aplicativo
 
-Hemos utilizado la estructura Disjoints o conjuntos disjuntos para realizar y a su vez detectar las uniones de extremo a extremo con las fichas del jugador correspondiente implementando la finalidad del juego.
+Hemos utilizado la estructura Disjoints o conjuntos disjuntos para realizar y a su vez detectar las uniones de extremo a extremo con las fichas del jugador correspondiente implementando la finalidad del juego, esto mediante nodos auxiliares, dos para el rojo y otros dos para azul. Estos nodos son inicializados en el main. Los extremos están conectados a los nodos auxiliares correspondientes teniendo como complejidad O(1).
 
-También se han empleado funciones de pygame para el dibujo de polígonos y sus contornos como pygame.draw.polygon, tomando como referencia las coordenadas y el tamaño que tendrá cada hexágono. pygame.draw.line() para la creación de las líneas que unen los hexágonos. pygame.display.flip() para mostrar los cambios en la pantalla.
+También se han empleado funciones de pygame para el dibujo de polígonos y sus contornos como ```pygame.draw.polygon()```, tomando como referencia las coordenadas y el tamaño que tendrá cada hexágono. ```pygame.draw.line()``` para la creación de las líneas que unen los hexágonos. ```pygame.display.flip()``` para mostrar los cambios en la pantalla.
 
 Se diseña el tablero unitariamente cada hexagono con sus respectivas coordenadas como si de un plano cartesiano invertido se tratase tratandolos de manera lógica como si fueran nodos pero representandolos como un tablero de hexágonos.
 
-El uso de una función convert_pixel_to_hex_coords es necesaria para poder aplicar DisjointSet ya que este trabaja con coordenadas. Las coordenadas de cada hexágono se emplean para identificar y manipular los nodos en la estructura de datos del Disjoint Set. Esto en el juego Hex es aplicado en forma de hexágonos que vendrían a ser los nodos.
+El uso de una función ```convert_pixel_to_hex_coords()``` es necesaria para poder aplicar DisjointSet ya que este trabaja con coordenadas. Las coordenadas de cada hexágono se emplean para identificar y manipular los nodos en la estructura de datos del Disjoint Set. Esto en el juego Hex es aplicado en forma de hexágonos que vendrían a ser los nodos.
 
 Además el sistema de turnos está basado en clicks.
+
+### Analisis de complejidad
+
+```render_hex_map()``` posee una complejidad de tiempo O(n^2) porque tiene dos bucles anidados que recorren ancho y alto del tablero.
+
+```handle_mouse_click()``` posee una complejidad de tiempo O(n) porque llama a una función que tiene un ciclo for que recorre el tablero.
+
+```print_player_positions()``` posee una complejidad de tiempo O(n) porque recorre las posiciones en el tablero.
+
+```run()``` posee una complejidad de tiempo O(n^2) debido a que llama a una funcion ```render_hex_map()``` con una complejidad de tiempo O(n^2)
 
 ## Bibliografía
 

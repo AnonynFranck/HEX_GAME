@@ -16,7 +16,7 @@ class Renderer:
     BLUE_PIECE_COLOR = pygame.Color(0, 0, 255)
     BORDER_COLOR = pygame.Color(128, 0, 128)  # Color morado
 
-    def __init__(self, difficulty, default_width, default_height):
+    def __init__(self, difficulty):
         pygame.init()
         self.graphic_size = 70  # Tamaño de cada hexágono
         self.map_type = "HEX"  # Tipo de mapa: HEX

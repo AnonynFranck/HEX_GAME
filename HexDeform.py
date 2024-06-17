@@ -161,6 +161,10 @@ class Renderer:
         g = self.graphic_size
         m_width, m_height = self.map_size
 
+        hex_size = self.graphic_size
+        half = hex_size / 2
+        quarter = hex_size / 4
+
         magenta = pygame.Color(255, 0, 255)
 
         b = pygame.Surface((self.window_width, self.window_height))
@@ -183,16 +187,25 @@ class Renderer:
                 if y > 0:
                     y_blit -= ((g / 4) + 1) * y
 
+                points = []
+                points.append((x_blit + half, y_blit))
+                points.append((x_blit + hex_size - 1, y_blit + quarter))
+                points.append((x_blit + hex_size - 1, y_blit + 3 * quarter))
+                points.append((x_blit + half, y_blit + hex_size - 1))
+                points.append((x_blit, y_blit + 3 * quarter))
+                points.append((x_blit, y_blit + quarter))
+
                 if (x, y) in self.red_player_positions:
                     b.blit(self.red_piece_gfx, (x_blit, y_blit))
                 elif (x, y) in self.blue_player_positions:
                     b.blit(self.blue_piece_gfx, (x_blit, y_blit))
-                elif (x, y) in path_blue:
-                    b.blit(self.node_gfx_blue, (x_blit, y_blit))
-                elif (x,y) in path_red:
-                    b.blit(self.node_gfx_red, (x_blit, y_blit))
                 else:
                     b.blit(self.empty_node_gfx, (x_blit, y_blit))
+
+                if x == 0 or x == m_width - 1:  # Extremos verticales
+                    pygame.draw.polygon(b, self.START_HEX_COLOR_BLUE, points, 3)
+                if y == 0 or y == m_height - 1:  # Extremos horizontales
+                    pygame.draw.polygon(b, self.START_HEX_COLOR_RED, points, 3)
 
         difficulty_text = self.font.render(self.difficulty, True, (255, 255, 255))
         self.screen.blit(b, (0, 0))

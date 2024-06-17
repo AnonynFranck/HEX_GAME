@@ -1,10 +1,9 @@
 ---
-title: "Título del Proyecto"
+title: "HEX GAME"
 author: 
-- Nombre Autor 1
-- Nombre Autor 2
-- Nombre Autor 3
-date: "Fecha de Entrega"
+- Nombre Francko Therey
+- Nombre Luis Enrique
+date: "16/06/24"
 ---
 
 # UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS

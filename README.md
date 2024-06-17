@@ -37,10 +37,9 @@ Carnaval Sánchez, Luis Martin
 1. [Descripción del Problema](#descripción-del-problema)
     - [Descripción](#descripción)
     - [Fundamentación del Problema](#fundamentación-del-problema)
-2. [Descripción y Visualización del Conjunto de Datos](#descripción-y-visualización-del-conjunto-de-datos)
-    - [Descripción del Conjunto de Datos](#descripción-del-conjunto-de-datos)
-    - [Representación mediante Grafos](#representación-mediante-grafos)
+2. [Descripción del Conjunto de Datos](#descripción-del-conjunto-de-datos)
 3. [Propuesta](#propuesta)
+4. [Diseño del aplicativo](#diseño-del-aplicativo)
 4. [Bibliografía](#bibliografía)
 
 ## Descripción del Problema
@@ -57,7 +56,7 @@ Aunque nuestro enfoque principal no será la implementación completa del algori
 En este proyecto, al utilizar el algoritmo de Dijkstra en conjunto con un árbol de decisiones, podemos estimar el número de posibles resultados o nodos en el árbol de decisiones de la siguiente manera:
 
 * Primero, debemos considerar que el tablero de Hex tiene un tamaño de 11x11, lo que significa que hay un total de $121$ celdas o nodos en el grafo.
-* Para calcular el número máximo de nodos en el árbol de decisiones, podemos suponer que en cada turno, el bot (jugador rojo) tiene la opción de colocar su ficha en cualquiera de las celdas vacías restantes. Esto significa que en el primer turno, el bot tiene 121 opciones diferentes.
+* Para calcular el número máximo de nodos en el árbol de decisiones, podemos suponer que en cada turno, el bot (jugador rojo) tiene la opción de colocar su ficha en cualquiera de las celdas vacías restantes. Esto significa que en el primer turno, el bot tiene $121$ opciones diferentes.
 * En el segundo turno, suponiendo que el oponente (jugador azul) también ha colocado una ficha, el bot tendría $119$ opciones ($121 - 2$ fichas colocadas).
 Siguiendo esta lógica, en el turno $t$, el número de opciones disponibles para el bot sería $121 - (2t - 1)$, ya que habrá $(2t - 1)$ fichas colocadas en el tablero ($t$ del bot y $t - 1$ del oponente).
 
@@ -72,6 +71,9 @@ Sin embargo, es importante tener en cuenta que este cálculo asume que todas las
 En la práctica, el número real de nodos en el árbol de decisiones será menor, ya que algunas jugadas serán descartadas por ser inválidas o poco prometedoras. Además, el uso del algoritmo de Dijkstra para encontrar la ruta más corta entre las fichas del bot, junto con la poda del árbol de decisiones basada en heurísticas y evaluaciones, reducirá aún más el tamaño efectivo del árbol de decisiones.
 ## Propuesta
 [Insertar propuesta y solución planteada]
+
+## Diseño del aplicativo
+[Insertar disenho]
 
 ## Bibliografía
 [Insertar lista de referencias bibliográficas]

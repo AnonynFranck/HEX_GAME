@@ -63,7 +63,8 @@ Siguiendo esta lógica, en el turno $t$, el número de opciones disponibles para
 
 Entonces, el número máximo de nodos en el árbol de decisiones sería la suma de las opciones disponibles en cada turno, desde el turno $1$ hasta el turno $60$ (asumiendo que el juego termina cuando todas las $121$ celdas están ocupadas):
 
-$$Número Máximo Nodos = 121 + 119 + 117 + ... + 3 + 1 = \sum_{t=1}^{60} (121 - 2(t - 1)) = 3721$$
+$$Número Máximo Nodos = 121 + 119 + 117 + ... + 3 + 1 = \sum_{t=1}^{60} (121 - 2(t - 1)) = 3721$$ 
+
 Por lo tanto, en el peor de los casos, el árbol de decisiones podría tener un máximo de 3721 nodos.
 
 Sin embargo, es importante tener en cuenta que este cálculo asume que todas las jugadas son posibles y que no se consideran las reglas del juego Hex, que implican la formación de cadenas ininterrumpidas para conectar los lados opuestos.

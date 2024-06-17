@@ -6,6 +6,8 @@ from DisjointSet import *
 import sys
 
 class Renderer:
+    START_HEX_COLOR_BLUE = pygame.Color(0, 0, 100)
+    START_HEX_COLOR_RED = pygame.Color(100, 0, 0)
     START_HEX_COLOR = pygame.Color(0, 255, 0)
     END_HEX_COLOR = pygame.Color(255, 0, 0)
     BARRIER_COLOR = pygame.Color(0, 0, 255)
@@ -24,6 +26,8 @@ class Renderer:
 
         self.empty_node_gfx = create_graphic(None)
         self.start_node_gfx = create_graphic(self.START_HEX_COLOR)
+        self.node_gfx_blue = create_graphic(self.START_HEX_COLOR_BLUE)
+        self.node_gfx_red = create_graphic(self.START_HEX_COLOR_RED)
         self.end_node_gfx = create_graphic(self.END_HEX_COLOR)
         self.barrier_node_gfx = create_graphic(self.BARRIER_COLOR)
         self.red_piece_gfx = create_graphic(self.RED_PIECE_COLOR)
@@ -153,7 +157,7 @@ class Renderer:
 
         return x_blit, y_blit
     
-    def render_hex_map(self, path):
+    def render_hex_map(self, path_blue, path_red):
         g = self.graphic_size
         m_width, m_height = self.map_size
 
@@ -183,8 +187,10 @@ class Renderer:
                     b.blit(self.red_piece_gfx, (x_blit, y_blit))
                 elif (x, y) in self.blue_player_positions:
                     b.blit(self.blue_piece_gfx, (x_blit, y_blit))
-                elif (x, y) in path:
-                    b.blit(self.start_node_gfx, (x_blit, y_blit))
+                elif (x, y) in path_blue:
+                    b.blit(self.node_gfx_blue, (x_blit, y_blit))
+                elif (x,y) in path_red:
+                    b.blit(self.node_gfx_red, (x_blit, y_blit))
                 else:
                     b.blit(self.empty_node_gfx, (x_blit, y_blit))
 
@@ -239,7 +245,8 @@ class Renderer:
             print(pos)
 
     def run(self, show_difficulty_menu):
-        path = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0)]
+        path_blue = [(0, 5), (1, 5), (2, 5), (3, 5), (4, 5), (5, 5), (6, 5), (7, 5), (8, 5), (9, 5), (10, 5)]
+        path_red = [(5, y) for y in range(11)]
         running = True
         while running:
             for event in pygame.event.get():
@@ -260,7 +267,7 @@ class Renderer:
             self.ai_player.make_move()
     
             # Show map and print position of the players
-            self.render_hex_map(path)
+            self.render_hex_map(path_blue, path_red)
             self.print_player_positions()
             
             # Show current player

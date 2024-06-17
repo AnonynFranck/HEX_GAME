@@ -116,9 +116,7 @@ class Renderer:
             points.append((half, hex_size - 1))
             points.append((0, 3 * quarter))
             points.append((0, quarter))
-
             pygame.draw.polygon(s, color, points)
-
         # Draw outlines
         pygame.draw.line(s, white, (half, 0), (hex_size - 1, quarter), 1)
         pygame.draw.line(s, white, (hex_size - 1, quarter), (hex_size - 1, 3 * quarter), 1)
@@ -284,16 +282,12 @@ class Renderer:
                         show_difficulty_menu()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_mouse_click(event.pos)
-
             # Realizar movimiento del bot
             self.ai_player.make_move()
-    
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
             self.print_player_positions()
-            
             # Show current player
             self.screen.fill((0, 0, 0))  # Clean screen
             self.draw_current_player()
-
         pygame.quit()

@@ -71,7 +71,15 @@ Sin embargo, es importante tener en cuenta que este cálculo asume que todas las
 
 En la práctica, el número real de nodos en el árbol de decisiones será menor, ya que algunas jugadas serán descartadas por ser inválidas o poco prometedoras. Además, el uso del algoritmo de Dijkstra para encontrar la ruta más corta entre las fichas del bot, junto con la poda del árbol de decisiones basada en heurísticas y evaluaciones, reducirá aún más el tamaño efectivo del árbol de decisiones.
 ## Propuesta
-[Insertar propuesta y solución planteada]
+
+Hemos utilizado la estructura Disjoints o conjuntos disjuntos para realizar y a su vez detectar las uniones de extremo a extremo con las fichas del jugador correspondiente implementando la finalidad del juego.
+
+Se usará DFS en lugar de BFS ya que BFS usa una búsqueda por anchura con una cierta eficacia en buscar el camino más corto, algo que a comparación de DFS es mucho más ineficiente ya que para este caso lo que se busca es evaluar las posibles rutas y escenarios. En hex todos tienen el mismo peso pero mientras se van eliminando los nodos el peso de estos va cambiando.
+
+Con respecto a los dataset el algoritmo que nos proporcionará muchos más datos será el DFS porque mediante fuerza bruta evaluará los 121 posibles caminos del tablero y 3661 posibles nodos.
+
+También se contempla implementar el algoritmo de Dijkstra para encontrar el camino más corto mediante un árbol de decisiones enfocado en Monte Carlo Tree Search el cual hará uso del Backtracking como estrategia de recorrido en profundidad. Este algoritmo reduce su cantidad de posibles nodos que con DFS serían 3661 haciéndolo mucho más eficiente.
+
 
 ## Bibliografía
 [Insertar lista de referencias bibliográficas]

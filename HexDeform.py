@@ -16,7 +16,7 @@ class Renderer:
     BLUE_PIECE_COLOR = pygame.Color(0, 0, 255)
     BORDER_COLOR = pygame.Color(128, 0, 128)  # Color morado
 
-    def __init__(self, difficulty, default_width, default_height):
+    def __init__(self, difficulty):
         pygame.init()
         self.graphic_size = 70  # Tamaño de cada hexágono
         self.map_type = "HEX"  # Tipo de mapa: HEX
@@ -42,7 +42,7 @@ class Renderer:
 
         self.red_player_positions = set()
         self.blue_player_positions = set()
-        self.current_player = "red"
+        self.current_player = "red" # current player
         self.difficulty = difficulty
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)

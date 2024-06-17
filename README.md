@@ -104,6 +104,24 @@ Además el sistema de turnos está basado en clicks.
 
 ```run()``` posee una complejidad de tiempo O(n^2) debido a que llama a una funcion ```render_hex_map()``` con una complejidad de tiempo O(n^2)
 
+### DisjointSet.py
+
+```__init__()``` posee una complejidad de tiempo O(n) porque inicializa con el tamaño del tablero los diccionarios rank y parent. En este n vendría a ser el número de hexágonos que componen el tablero.
+
+Inicializa la estructura de datos del conjunto disjunto. Crea dos diccionarios, parent y rank, para cada nodo en el tablero. También crea nodos auxiliares para representar los bordes del tablero. 
+
+```find()``` posee una complejidad O(a(n)) porque es constante en todos los valores practicos de n.
+
+Toma un nodo como entrada y devuelve el representante de su conjunto. Utiliza la técnica de compresión de caminos para optimizar futuras búsquedas.
+
+```union()``` posee una complejidad O(a(n)) porque llama a la funcion ```find()``` dos veces
+
+Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión por rango para mantener el árbol de conjuntos disjuntos equilibrado.
+
+```check_win()``` posee una complejidad O(1) porque solo realiza operaciones constantes
+
+Verifica si los nodos auxiliares rojos o azules están conectados, lo que indicaría que un jugador ha ganado el juego. Devuelve el color del jugador ganador o None si aún no hay ganador.
+
 ## Bibliografía
 
 Altamirano, C. (2018). MONTE CARLO TREE SEARCH PARA EL

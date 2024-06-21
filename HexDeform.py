@@ -229,6 +229,7 @@ class Renderer:
         x, y = self.convert_pixel_to_hex_coords(pos)
         if self.is_valid_hex_coords(x, y) and (x, y) not in self.occupied_positions:
             if self.current_player == "red":
+                print(f"Posicion del jugador rojo: {x}, {y}")
                 self.red_player_positions.add((x, y))
                 if y == 0:
                     self.disjoint_set.union((x, y), self.disjoint_set.red_top_node)

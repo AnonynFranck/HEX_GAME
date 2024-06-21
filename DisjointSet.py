@@ -34,24 +34,19 @@ class DisjointSet:
         return self.parent[x]
 
     def union(self, x, y):
-        #if self.is_valid_position(x) and self.is_valid_position(y):
-            x_root = self.find(x)
-            y_root = self.find(y)
-            if x_root == y_root:
-                return
-            if self.rank[x_root] < self.rank[y_root]:
-                self.parent[x_root] = y_root
-            elif self.rank[x_root] > self.rank[y_root]:
-                self.parent[y_root] = x_root
-            else:
-                self.parent[y_root] = x_root
-                self.rank[x_root] += 1
+        x_root = self.find(x)
+        y_root = self.find(y)
 
-    #def is_valid_position(self, pos):
-    #    x, y = pos
-    #    print(x, " === ", y)
-    #    return (x >= 0 and x < self.map_width) and (y >= 0 and y < self.map_height)
-        
+        if x_root == y_root:
+            return
+
+        if self.rank[x_root] < self.rank[y_root]:
+            self.parent[x_root] = y_root
+        elif self.rank[x_root] > self.rank[y_root]:
+            self.parent[y_root] = x_root
+        else:
+            self.parent[y_root] = x_root
+            self.rank[x_root] += 1
 
     def check_win(self):
         # Verificar si los nodos auxiliares rojos están conectados
@@ -63,3 +58,30 @@ class DisjointSet:
             return "blue"
 
         return None
+
+""" detect invert (winner red horizontal)
+        # Nodos auxiliares para las columnas 0 y última (para el rojo)
+        self.red_left_node = (-1, -1)
+        self.red_right_node = (-2, -2)
+
+        # Nodos auxiliares para las filas 0 y última (para el azul)
+        self.blue_top_node = (-3, -3)
+        self.blue_bottom_node = (-4, -4)
+
+        self.parent[self.red_left_node] = self.red_left_node
+        self.rank[self.red_left_node] = 0
+        self.parent[self.red_right_node] = self.red_right_node
+        self.rank[self.red_right_node] = 0
+        self.parent[self.blue_top_node] = self.blue_top_node
+        self.rank[self.blue_top_node] = 0
+        self.parent[self.blue_bottom_node] = self.blue_bottom_node
+        self.rank[self.blue_bottom_node] = 0
+    def check_win(self):
+        # Verificar si los nodos auxiliares rojos están conectados (victoria vertical)
+        if self.find(self.red_left_node) == self.find(self.red_right_node):
+            return "red"
+
+        # Verificar si los nodos auxiliares azules están conectados (victoria horizontal)
+        if self.find(self.blue_top_node) == self.find(self.blue_bottom_node):
+            return "blue"
+"""

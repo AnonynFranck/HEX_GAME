@@ -64,7 +64,7 @@ if __name__ == "__main__":
     start_screen.run()
 
 
-""" Detect invert (winner red horizontal)
+""" Detect invert (winner red horizontal) <-
     def handle_mouse_click(self, pos):
         if self.winner is not None:
             return

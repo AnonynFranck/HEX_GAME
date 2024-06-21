@@ -1,6 +1,4 @@
 import pygame
-from AIeasy import EasyAIPlayer
-from AInormal import NormalAIPlayer
 from AIhard import HardAIPlayer
 from DisjointSet import *
 import sys
@@ -48,9 +46,9 @@ class Renderer:
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)
 
         if difficulty == "Easy (BFS)":
-            self.ai_player = EasyAIPlayer(self)
+            self.ai_player = HardAIPlayer(self)
         elif difficulty == "Normal (Dijkstra)":
-            self.ai_player = NormalAIPlayer(self)
+            self.ai_player = HardAIPlayer(self)
         elif difficulty == "Hard (Monte Carlo Tree Search)":
             self.ai_player = HardAIPlayer(self)
     
@@ -286,7 +284,7 @@ class Renderer:
             self.ai_player.make_move()
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
-            self.print_player_positions()
+            # self.print_player_positions()
             # Show current player
             self.screen.fill((0, 0, 0))  # Clean screen
             self.draw_current_player()

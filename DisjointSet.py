@@ -58,3 +58,30 @@ class DisjointSet:
             return "blue"
 
         return None
+
+""" detect invert (winner red horizontal)
+        # Nodos auxiliares para las columnas 0 y última (para el rojo)
+        self.red_left_node = (-1, -1)
+        self.red_right_node = (-2, -2)
+
+        # Nodos auxiliares para las filas 0 y última (para el azul)
+        self.blue_top_node = (-3, -3)
+        self.blue_bottom_node = (-4, -4)
+
+        self.parent[self.red_left_node] = self.red_left_node
+        self.rank[self.red_left_node] = 0
+        self.parent[self.red_right_node] = self.red_right_node
+        self.rank[self.red_right_node] = 0
+        self.parent[self.blue_top_node] = self.blue_top_node
+        self.rank[self.blue_top_node] = 0
+        self.parent[self.blue_bottom_node] = self.blue_bottom_node
+        self.rank[self.blue_bottom_node] = 0
+    def check_win(self):
+        # Verificar si los nodos auxiliares rojos están conectados (victoria vertical)
+        if self.find(self.red_left_node) == self.find(self.red_right_node):
+            return "red"
+
+        # Verificar si los nodos auxiliares azules están conectados (victoria horizontal)
+        if self.find(self.blue_top_node) == self.find(self.blue_bottom_node):
+            return "blue"
+"""

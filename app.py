@@ -23,8 +23,8 @@ class StartScreen:
         self.start_hard_button = self.font.render("Hard", True, (255, 255, 255))#  (Monte Carlo Tree Search)
         self.start_hard_rect = self.start_hard_button.get_rect()
         self.start_hard_rect.center = (width // 2, height // 2 + 50)
-        # self.default_width = width
-        # self.default_height = height
+        self.default_width = width
+        self.default_height = height
 
     def run(self):
         running = True

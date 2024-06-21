@@ -34,19 +34,24 @@ class DisjointSet:
         return self.parent[x]
 
     def union(self, x, y):
-        x_root = self.find(x)
-        y_root = self.find(y)
+        #if self.is_valid_position(x) and self.is_valid_position(y):
+            x_root = self.find(x)
+            y_root = self.find(y)
+            if x_root == y_root:
+                return
+            if self.rank[x_root] < self.rank[y_root]:
+                self.parent[x_root] = y_root
+            elif self.rank[x_root] > self.rank[y_root]:
+                self.parent[y_root] = x_root
+            else:
+                self.parent[y_root] = x_root
+                self.rank[x_root] += 1
 
-        if x_root == y_root:
-            return
-
-        if self.rank[x_root] < self.rank[y_root]:
-            self.parent[x_root] = y_root
-        elif self.rank[x_root] > self.rank[y_root]:
-            self.parent[y_root] = x_root
-        else:
-            self.parent[y_root] = x_root
-            self.rank[x_root] += 1
+    #def is_valid_position(self, pos):
+    #    x, y = pos
+    #    print(x, " === ", y)
+    #    return (x >= 0 and x < self.map_width) and (y >= 0 and y < self.map_height)
+        
 
     def check_win(self):
         # Verificar si los nodos auxiliares rojos están conectados

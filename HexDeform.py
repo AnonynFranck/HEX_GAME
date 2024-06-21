@@ -1,7 +1,7 @@
 import pygame
 from AIeasy import EasyAIPlayer
 from AInormal import NormalAIPlayer
-from AIhard import HardAIPlayer
+from Mcts import MCTSAgentHex
 from DisjointSet import *
 import sys
 
@@ -15,7 +15,6 @@ class Renderer:
     RED_PIECE_COLOR = pygame.Color(255, 0, 0)
     BLUE_PIECE_COLOR = pygame.Color(0, 0, 255)
     BORDER_COLOR = pygame.Color(128, 0, 128)  # Color morado
-
     def __init__(self, difficulty):
         pygame.init()
         self.graphic_size = 70  # Tamaño de cada hexágono
@@ -42,24 +41,34 @@ class Renderer:
 
         self.red_player_positions = set()
         self.blue_player_positions = set()
-        self.current_player = "red" # current player
+        self.current_player = "blue" # current player
         self.difficulty = difficulty
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)
+        self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
+
+        #self.window_width = default_width
+        #self.window_height = default_height
+
+        self.disjoint_set = DisjointSet(self.map_size) #Inicializando estructura DisjoinSet
+        self.winner = None  # Para almacenar al WINNER
 
         if difficulty == "Easy (BFS)":
             self.ai_player = EasyAIPlayer(self)
         elif difficulty == "Normal (Dijkstra)":
             self.ai_player = NormalAIPlayer(self)
         elif difficulty == "Hard (Monte Carlo Tree Search)":
-            self.ai_player = HardAIPlayer(self)
-    
-        #self.window_width = default_width
-        #self.window_height = default_height
-        self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
+            self.ai_player = MCTSAgentHex(self)
 
-        self.disjoint_set = DisjointSet(self.map_size) #Inicializando estructura DisjoinSet
-        self.winner = None  # Para almacenar al WINNER
+    def copy_state(self):
+        state = {
+            'occupied_positions': self.occupied_positions.copy(),
+            'red_player_positions': self.red_player_positions.copy(),
+            'blue_player_positions': self.blue_player_positions.copy(),
+            # 'current_player': self.current_player,
+            # 'winner': self.winner
+        }
+        return state
 
     def draw_current_player(self):
         if not self.winner:
@@ -223,7 +232,7 @@ class Renderer:
 
         pygame.display.flip()
 
-
+    
     def handle_mouse_click(self, pos):
         if self.winner is not None:
             return
@@ -239,7 +248,7 @@ class Renderer:
                 for neighbor in self.get_neighbors(x, y):
                     if neighbor in self.red_player_positions:
                         self.disjoint_set.union((x, y), neighbor)
-            else:
+            elif self.current_player == "blue":
                 self.blue_player_positions.add((x, y))
                 if x == 0:
                     self.disjoint_set.union((x, y), self.disjoint_set.blue_left_node)
@@ -255,7 +264,43 @@ class Renderer:
             self.winner = self.disjoint_set.check_win()
             if self.winner:
                 print(f"El jugador {self.winner} ha ganado!")
+    """
+    def handle_mouse_click(self, pos):
+        if self.winner is not None:
+            return
 
+        x, y = self.convert_pixel_to_hex_coords(pos)
+        if self.is_valid_hex_coords(x, y) and (x, y) not in self.occupied_positions:
+            if self.current_player == "red":
+                if y == 0 or any((x, y - 1) in self.red_player_positions):
+                    self.red_player_positions.add((x, y))
+                    self.occupied_positions.add((x, y))
+                    self.disjoint_set.union((x, y), self.disjoint_set.red_top_node)
+                    if y == self.map_size[1] - 1:
+                        self.disjoint_set.union((x, y), self.disjoint_set.red_bottom_node)
+                    for neighbor in self.get_neighbors(x, y):
+                        if neighbor in self.red_player_positions:
+                            self.disjoint_set.union((x, y), neighbor)
+                    self.current_player = "blue"
+                else:
+                    return  # Movimiento inválido para el jugador rojo
+            elif self.current_player == "blue":
+                if x == 0 or any((x - 1, y) in self.blue_player_positions):
+                    self.blue_player_positions.add((x, y))
+                    self.occupied_positions.add((x, y))
+                    self.disjoint_set.union((x, y), self.disjoint_set.blue_left_node)
+                    if x == self.map_size[0] - 1:
+                        self.disjoint_set.union((x, y), self.disjoint_set.blue_right_node)
+                    for neighbor in self.get_neighbors(x, y):
+                        if neighbor in self.blue_player_positions:
+                            self.disjoint_set.union((x, y), neighbor)
+                    self.current_player = "red"
+                else:
+                    return  # Movimiento inválido para el jugador azul
+
+            self.winner = self.disjoint_set.check_win()
+            if self.winner:
+                print(f"El jugador {self.winner} ha ganado!")  """
     def print_player_positions(self):
         print("Posiciones del jugador rojo:")
         for pos in self.red_player_positions:
@@ -282,11 +327,16 @@ class Renderer:
                         show_difficulty_menu()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_mouse_click(event.pos)
-            # Realizar movimiento del bot
-            self.ai_player.make_move()
+                
+                # Realizar movimiento del bot
+                if self.current_player == "red":
+                    # self.ai_player.search()  # Buscar durante 5 segundos
+                    # best_move = self.ai_player.best_move()
+                    self.ai_player.make_move()
+            
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
-            self.print_player_positions()
+            # self.print_player_positions()
             # Show current player
             self.screen.fill((0, 0, 0))  # Clean screen
             self.draw_current_player()

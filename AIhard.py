@@ -11,6 +11,51 @@ class HardAIPlayer:
         self.ending_vertexes = [(x, self.map_size[1] - 1) for x in range(self.map_size[0])]
         self.last_move = None
 
+        def _is_human_about_to_win(self, pos):
+        # Temporarily add the position to the human player's positions
+        self.game.blue_player_positions.add(pos)
+
+        for start in self.starting_vertexes:
+            if self._get_shortest_path(start, self.ending_vertexes):
+                self.game.blue_player_positions.remove(pos)
+                return True
+        self.game.blue_player_positions.remove(pos)
+        return False
+
+    def print_board(self):
+        for y in range(self.map_size[1]):
+            for x in range(self.map_size[0]):
+                if (x, y) in self.game.blue_player_positions:
+                    print('B', end=' ')
+                elif (x, y) in self.game.red_player_positions:
+                    print('R', end=' ')
+                else:
+                    print('.', end=' ')
+            print()  # Newline at the end of each row
+
+    def _backtrack(self, start, path, memo):
+        if start in self.ending_vertexes:
+            return path + [start]
+
+        if start in memo:  # Return memoized result
+            return memo[start]
+
+        best_path = None
+        for move in self.adj_map[start]:
+            if move not in self.game.occupied_positions and move not in path and not self._is_blocked_by_human(move):
+                new_path = self._backtrack(move, path + [start], memo)
+                if new_path and (not best_path or len(new_path) < len(best_path)):
+                    best_path = new_path
+
+        memo[start] = best_path  # Memoize result
+        return best_path
+
+    def _is_blocked_by_human(self, move):
+        for neighbor in self.adj_map[move]:
+            if neighbor in self.game.blue_player_positions:
+                return True
+        return False
+    
     def _create_adj_map(self):
         adj_map = {}
         for y in range(self.map_size[1]):
@@ -25,6 +70,8 @@ class HardAIPlayer:
                 self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))
                 self.last_move = move
                 self._update_game_state(move)
+                print(f"Posicion del bot: {move}")
+                self.print_board()
 
     def _get_best_move(self):
         if not self.last_move:

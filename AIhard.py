@@ -11,7 +11,7 @@ class HardAIPlayer:
         self.ending_vertexes = [(x, self.map_size[1] - 1) for x in range(self.map_size[0])]
         self.last_move = None
 
-        def _is_human_about_to_win(self, pos):
+    def _is_human_about_to_win(self, pos):
         # Temporarily add the position to the human player's positions
         self.game.blue_player_positions.add(pos)
 

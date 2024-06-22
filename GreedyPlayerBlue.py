@@ -2,7 +2,7 @@ class GreedyBlueAIPlayer:
     def __init__(self, game):
         self.game = game
         self.last_move = None
-        self.blocking_column = None
+        self.blocking_column = None # Block
 
     def make_move(self):
         print(f"Turno actual: {self.game.current_player}")

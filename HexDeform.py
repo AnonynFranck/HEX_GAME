@@ -54,9 +54,7 @@ class Renderer:
         elif difficulty == "Hard (Monte Carlo Tree Search)":
             self.ai_playerRed = HardAIPlayer(self)
             self.ai_playerBlue = GreedyBlueAIPlayer(self)
-    
-        #self.window_width = default_width
-        #self.window_height = default_height
+
         self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
 
         self.disjoint_set = DisjointSet(self.map_size) #Inicializando estructura DisjoinSet

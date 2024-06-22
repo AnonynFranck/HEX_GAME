@@ -67,13 +67,9 @@ class HardAIPlayer:
             for move in best_path[1:]:
                 if move not in self.game.occupied_positions:
                     return move
-
-        # If no good path, choose a move that connects to an existing piece
         possible_moves = set(self.adj_map[self.last_move]) - self.game.occupied_positions
         if possible_moves:
             return random.choice(list(possible_moves))
-
-        # If still no move, choose a random unoccupied position
         unoccupied = [(x, y) for x in range(self.map_size[0]) for y in range(self.map_size[1]) 
                       if (x, y) not in self.game.occupied_positions]
         return random.choice(unoccupied) if unoccupied else None
@@ -100,13 +96,11 @@ class HardAIPlayer:
                 self.adj_map[move].remove(neighbor)
                 self.adj_map[neighbor].remove(move)
 
-        # Update starting and ending vertexes
         if move in self.starting_vertexes:
             self.starting_vertexes.remove(move)
         if move in self.ending_vertexes:
             self.ending_vertexes.remove(move)
 
-        # Add new starting and ending vertexes if applicable
         if move[1] == 0:
             new_starts = [n for n in self.adj_map[move] if n[1] == 0 and n not in self.game.occupied_positions]
             self.starting_vertexes.extend(new_starts)

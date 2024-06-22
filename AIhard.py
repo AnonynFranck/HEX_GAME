@@ -49,7 +49,6 @@ class HardAIPlayer:
 
     def _get_best_move(self):
         if not self.last_move:
-            # First move: choose a random starting point
             return random.choice(self.starting_vertexes)
 
         paths = {}
@@ -64,13 +63,15 @@ class HardAIPlayer:
             with open('movimientos.txt', 'a') as f:  # Abre el archivo en modo de escritura
                 f.write("Mejor camino antes de decidir:\n")
                 f.write(str(best_path) + "\n")  # Escribe el mejor camino en el archivo
+
             for move in best_path[1:]:
                 if move not in self.game.occupied_positions:
-                    return move
-        possible_moves = set(self.adj_map[self.last_move]) - self.game.occupied_positions
-        if possible_moves:
-            return random.choice(list(possible_moves))
-        unoccupied = [(x, y) for x in range(self.map_size[0]) for y in range(self.map_size[1]) 
+                    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                        adj_x, adj_y = move[0] + dx, move[1] + dy
+                        if (adj_x, adj_y) in self.game.red_player_positions:
+                            return move
+
+        unoccupied = [(x, y) for x in range(self.map_size[0]) for y in range(self.map_size[1])
                       if (x, y) not in self.game.occupied_positions]
         return random.choice(unoccupied) if unoccupied else None
 

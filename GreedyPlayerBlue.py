@@ -35,24 +35,47 @@ class GreedyBlueAIPlayer:
             print(f"Movimiento aleatorio: {random_move}")
             return random_move
         # Si no se encuentra ningún movimiento específico, elegir una casilla vacía aleatoria
-        print("No se encontró ningún movimiento válido")
-        return None
+        #print("No se encontró ningún movimiento válido")
+        #return None
 
     def _find_blocking_move(self):
-        for y in range(self.game.map_size[1]):
-            for x in range(self.game.map_size[0]):
-                if (x, y) not in self.game.occupied_positions:
-                    # Verificar si este movimiento bloquea un camino casi completo del rojo
-                    red_neighbors = sum(1 for nx, ny in self.game.get_neighbors(x, y) if (nx, ny) in self.game.red_player_positions)
-                    if red_neighbors >= 2:
-                        return (x, y)
+        # Buscar un camino vertical del rojo para bloquear
+        for x in range(self.game.map_size[0]):
+            red_path = self._find_vertical_red_path(x)
+            if red_path:
+                # Intentar bloquear el camino en la parte superior o inferior
+                block_top = (x, red_path[0][1] - 1)
+                block_bottom = (x, red_path[-1][1] + 1)
+                if self._is_valid_move(block_top):
+                    return block_top
+                if self._is_valid_move(block_bottom):
+                    return block_bottom
+                
+                # Si no se puede bloquear arriba o abajo, intentar bloquear en el medio
+                for rx, ry in red_path:
+                    block_left = (rx - 1, ry)
+                    block_right = (rx + 1, ry)
+                    if self._is_valid_move(block_left):
+                        return block_left
+                    if self._is_valid_move(block_right):
+                        return block_right
+        
         return None
+    def _find_vertical_red_path(self, x):
+        path = []
+        for y in range(self.game.map_size[1]):
+            if (x, y) in self.game.red_player_positions:
+                path.append((x, y))
+            else:
+                if len(path) >= 2:  # Considerar un camino si hay al menos 2 piezas rojas consecutivas
+                    return path
+                path = []
+        return path if len(path) >= 2 else None
 
     def _find_advancing_move(self):
-        # Intentar avanzar hacia la derecha
         for x in range(self.game.map_size[0]):
             for y in range(self.game.map_size[1]):
-                if (x, y) not in self.game.occupied_positions:
+                if self._is_valid_move((x, y)):
                     return (x, y)
         return None
 
@@ -62,3 +85,9 @@ class GreedyBlueAIPlayer:
                         if (x, y) not in self.game.occupied_positions]
         print(f"Casillas vacías: {len(empty_positions)}")
         return random.choice(empty_positions) if empty_positions else None
+    
+    def _is_valid_move(self, pos):
+        x, y = pos
+        return (0 <= x < self.game.map_size[0] and 
+                0 <= y < self.game.map_size[1] and 
+                (x, y) not in self.game.occupied_positions)

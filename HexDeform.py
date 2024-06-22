@@ -139,10 +139,10 @@ class Renderer:
         x_pos -= board_x
         y_pos -= board_y
 
-        y = y_pos // (g * 0.75)
-        x = (x_pos - y * (g // 2)) // g
+        # Ajustar el cálculo de las coordenadas
+        y = int((y_pos / (g * 0.75)))
+        x = int((x_pos - (y % 2) * g / 2) / g)
 
-        print("LLAMADA DE CONVERT_PIXEL_TO_HEX_COORDS: ", x, " ", y)
         return x, y
 
     def is_valid_hex_coords(self, x, y):

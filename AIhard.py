@@ -11,16 +11,9 @@ class HardAIPlayer:
         self.ending_vertexes = [(x, self.map_size[1] - 1) for x in range(self.map_size[0])]
         self.last_move = None
 
-    def _is_human_about_to_win(self, pos):
-        # Temporarily add the position to the human player's positions
-        self.game.blue_player_positions.add(pos)
-
-        for start in self.starting_vertexes:
-            if self._get_shortest_path(start, self.ending_vertexes):
-                self.game.blue_player_positions.remove(pos)
-                return True
-        self.game.blue_player_positions.remove(pos)
-        return False
+    def _get_valid_moves(self):
+        return [(x, y) for x in range(self.map_size[0]) for y in range(self.map_size[1])
+                if (x, y) not in self.game.occupied_positions]
 
     def print_board(self):
         for y in range(self.map_size[1]):
@@ -31,30 +24,7 @@ class HardAIPlayer:
                     print('R', end=' ')
                 else:
                     print('.', end=' ')
-            print()  # Newline at the end of each row
-
-    def _backtrack(self, start, path, memo):
-        if start in self.ending_vertexes:
-            return path + [start]
-
-        if start in memo:  # Return memoized result
-            return memo[start]
-
-        best_path = None
-        for move in self.adj_map[start]:
-            if move not in self.game.occupied_positions and move not in path and not self._is_blocked_by_human(move):
-                new_path = self._backtrack(move, path + [start], memo)
-                if new_path and (not best_path or len(new_path) < len(best_path)):
-                    best_path = new_path
-
-        memo[start] = best_path  # Memoize result
-        return best_path
-
-    def _is_blocked_by_human(self, move):
-        for neighbor in self.adj_map[move]:
-            if neighbor in self.game.blue_player_positions:
-                return True
-        return False
+            print()
     
     def _create_adj_map(self):
         adj_map = {}
@@ -64,14 +34,18 @@ class HardAIPlayer:
         return adj_map
 
     def make_move(self):
-        if self.game.current_player == "red" and not self.game.winner:
-            move = self._get_best_move()
-            if move:
-                self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))
-                self.last_move = move
-                self._update_game_state(move)
-                print(f"Posicion del bot ROJO: {move}")
-                self.print_board()
+        with open('movimientos.txt', 'a') as f:  # Abre el archivo en modo de escritura
+            if self.game.current_player == "red" and not self.game.winner:
+                f.write("Movimientos posibles antes de decidir:\n")
+                for move in self._get_valid_moves():
+                    f.write(str(move) + "\n")  # Escribe el movimiento en el archivo
+                move = self._get_best_move()
+                if move:
+                    self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))
+                    self.last_move = move
+                    self._update_game_state(move)
+                    f.write(f"Posicion del bot ROJO: {move}\n")  # Escribe la posición del bot en el archivo
+                    self.print_board()
 
     def _get_best_move(self):
         if not self.last_move:
@@ -87,7 +61,9 @@ class HardAIPlayer:
 
         if paths:
             best_path = paths[min(paths.keys())]
-            # Choose the next move that's not occupied
+            with open('movimientos.txt', 'a') as f:  # Abre el archivo en modo de escritura
+                f.write("Mejor camino antes de decidir:\n")
+                f.write(str(best_path) + "\n")  # Escribe el mejor camino en el archivo
             for move in best_path[1:]:
                 if move not in self.game.occupied_positions:
                     return move

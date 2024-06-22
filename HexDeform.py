@@ -1,7 +1,9 @@
 import pygame
 from AIhard import HardAIPlayer
 from DisjointSet import *
+from GreedyPlayerBlue import GreedyBlueAIPlayer
 import sys
+import time
 
 class Renderer:
     START_HEX_COLOR_BLUE = pygame.Color(0, 0, 100)
@@ -50,7 +52,8 @@ class Renderer:
         elif difficulty == "Normal (Dijkstra)":
             self.ai_player = HardAIPlayer(self)
         elif difficulty == "Hard (Monte Carlo Tree Search)":
-            self.ai_player = HardAIPlayer(self)
+            self.ai_playerRed = HardAIPlayer(self)
+            self.ai_playerBlue = GreedyBlueAIPlayer(self)
     
         #self.window_width = default_width
         #self.window_height = default_height
@@ -139,6 +142,7 @@ class Renderer:
         y = y_pos // (g * 0.75)
         x = (x_pos - y * (g // 2)) // g
 
+        print("LLAMADA DE CONVERT_PIXEL_TO_HEX_COORDS: ", x, " ", y)
         return x, y
 
     def is_valid_hex_coords(self, x, y):
@@ -153,7 +157,6 @@ class Renderer:
 
         x_blit = board_x + (x * g) + (g // 2 * (y % 2))
         y_blit = board_y + (y * g * 0.75)
-
         return x_blit, y_blit
 
     def render_hex_map(self, path_blue, path_red):
@@ -249,6 +252,8 @@ class Renderer:
                         self.disjoint_set.union((x, y), neighbor)
 
             self.occupied_positions.add((x, y))
+            print("OCUPADOS: ", self.occupied_positions)
+            print(f"TAMANHO Posiciones ocupadas: {len(self.occupied_positions)}")
             self.current_player = "blue" if self.current_player == "red" else "red"
 
             self.winner = self.disjoint_set.check_win()
@@ -282,7 +287,12 @@ class Renderer:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_mouse_click(event.pos)
             # Realizar movimiento del bot
-            self.ai_player.make_move()
+            if self.current_player == "red":
+                time.sleep(0.5)
+                self.ai_playerRed.make_move()
+            elif self.current_player == "blue":
+                time.sleep(0.5)
+                self.ai_playerBlue.make_move()
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
             # self.print_player_positions()

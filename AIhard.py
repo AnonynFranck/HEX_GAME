@@ -70,7 +70,7 @@ class HardAIPlayer:
                 self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))
                 self.last_move = move
                 self._update_game_state(move)
-                print(f"Posicion del bot: {move}")
+                print(f"Posicion del bot ROJO: {move}")
                 self.print_board()
 
     def _get_best_move(self):

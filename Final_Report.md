@@ -77,20 +77,17 @@ En la práctica, el número real de nodos en el árbol de decisiones será menor
 
 ### Origen de los Datos
 
-
+Los datos de los ganadores se generan cuando uno de los bots gana la partida escribiendo en un archivo de texto el ganador de la partida y la cantidad de movimientos que se realizaron para llegar a ese resultado.
 
 Los datos de los movimientos se generan en cuanto uno de los bots realiza un movimiento durante la compilación del programa. Primero se guarda en un archivo de texto los espacios posibles que el algoritmo considero. Luego se guarda la posición que el bot eligió y finalmente el mejor camino posible empezando por el nodo inicial.
 
-
-
 ### Motivo del Análisis
 
-Saber cuanto es el rango de victorias para el bot rojo y azul
-
+Saber cuanto es el rango de victorias para el bot rojo y azul así como también hallar los espacios disponibles y ocupados que permiten al jugador rojo obtener la victoria.
 
 ### Relacion con grafos
 
-
+Cada casilla del tablero esta representada de manera logica como un nodo, y las conexiones entre las celdas adyacentes representan las aristas de un grafo.
 
 ## Propuesta
 

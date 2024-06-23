@@ -308,6 +308,13 @@ Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión p
 
 ## Validación de datos y pruebas
 
+<p align="center">
+  <img src="images/dataset_graph.png" width="400"><br>
+    <a href="https://docs.google.com/spreadsheets/d/1aukxchH79EYdNzJKLk0XQ3KdyHOFFYE3O7KxIXU3Rj8/edit?gid=0#gid=0">Dataset</a>
+</p>
+
+
+
 ## Conclusiones
 
 ## Bibliografía

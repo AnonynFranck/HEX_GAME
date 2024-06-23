@@ -204,7 +204,7 @@ Utiliza una estrategia de fuerza bruta basada en DFS (Depth-First Search) evalua
 * Explora sistemáticamente todos los caminos posibles desde su posición actual hasta el borde opuesto con la finalidad de intenta crear y extender caminos para completar una conexión entre los bordes superior e inferior utiliza la estructura DisjointSet para usar la conectividad y detectar caminos potenciales. Además, al usar un recorrido por profundidad nos permite prevenir obstaculos que se presenten usando backtracking.
 
 <p align="center">
-  <img src="images/BFS2.gif" width="400">
+  <img src="images/DFS2.gif" width="400">
 </p>
 
 #### Bot Azul (GreedyBlueAIPlayer):

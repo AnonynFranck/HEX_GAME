@@ -57,6 +57,11 @@ En este proyecto, nos enfocaremos en el desarrollo de un bot (jugador rojo) que 
 
 Aunque nuestro enfoque principal no será la implementación completa del algoritmo de Monte Carlo Tree Search (MCTS), tomaremos algunas ideas y conceptos clave de este enfoque. Por ejemplo, utilizaremos simulaciones y rollouts para explorar las posibles jugadas y evaluar su efectividad, lo que contribuirá a mejorar la calidad y efectividad del bot en el juego. Por esa razon esta combinación de técnicas proporcionará al bot la capacidad de analizar el tablero de manera eficiente, simular movimientos potenciales y tomar decisiones estratégicas en cada turno, adaptándose a las jugadas del oponente y buscando la conexión ganadora óptima.
 
+<div align="center">
+  <img src="images/GR7qf.png" alt="MONTE CARLO TREE SEARCH" /*width="200"*/>
+</div>
+
+
 ## Descripción del Conjunto de Datos
 En este proyecto, al utilizar el algoritmo de Dijkstra en conjunto con un árbol de decisiones, podemos estimar el número de posibles resultados o nodos en el árbol de decisiones de la siguiente manera:
 
@@ -77,17 +82,109 @@ En la práctica, el número real de nodos en el árbol de decisiones será menor
 
 ### Origen de los Datos
 
-Los datos de los ganadores se generan cuando uno de los bots gana la partida escribiendo en un archivo de texto el ganador de la partida y la cantidad de movimientos que se realizaron para llegar a ese resultado.
+Los datos se generan durante el transcurso de las partidas de Hex en un tablero de $11$ X $11$, donde se enfrentan dos bots con estrategias distintas:
 
-Los datos de los movimientos se generan en cuanto uno de los bots realiza un movimiento durante la compilación del programa. Primero se guarda en un archivo de texto los espacios posibles que el algoritmo considero. Luego se guarda la posición que el bot eligió y finalmente el mejor camino posible empezando por el nodo inicial.
+**Bot Rojo (HardAIPlayer):**
+
+    Utiliza una combinación de algoritmos de búsqueda de caminos (como BFS) de tal forma que, en cada turno, evalúa múltiples rutas posibles y selecciona la que considera óptima. Por esa razon, su objetivo es crear un camino continuo de fichas rojas que conecte los bordes superior e inferior del tablero.
+
+
+**Bot Azul (GreedyBlueAIPlayer):**
+
+    Emplea una estrategia codiciosa (greedy) enfocada principalmente en bloquear al jugador rojo. Para ello se implemento un sistema de componentes conectados para identificar y obstruir los caminos potenciales del oponente, teniendo en cuenta que mientras bloquea buscará avanzar hacia su propio objetivo de conectar los bordes izquierdo y derecho del tablero.
+
+
+
+Los datos se generan y registran de la siguiente manera:
+
+* Movimientos considerados:
+
+  Antes de cada movimiento del Bot Rojo, se guarda en un archivo de texto (movimientos.txt) una lista de todas las posiciones válidas que el algoritmo está considerando.
+
+
+* Movimiento seleccionado:
+
+  Después de que cada bot realiza su movimiento, se registra la posición exacta donde se colocó la ficha.
+
+
+* Camino óptimo:
+
+  Para el Bot Rojo, después de cada movimiento, se guarda el camino que el algoritmo considera como el mejor en ese momento, mostrando la secuencia de casillas desde su posición actual hasta el borde objetivo.
+
+
+* Estado del tablero:
+
+  Después de cada movimiento, se guarda una representación del estado actual del tablero, mostrando las posiciones de todas las fichas rojas y azules.
+
+
+* Resultado de la partida:
+
+  Al finalizar cada juego, se registra el ganador (Rojo o Azul) y el número total de movimientos realizados durante la partida.
+
+
+* Estadísticas de nodos explorados:
+
+  Se lleva un conteo de cuántos nodos (posiciones) explora cada bot durante la partida, lo que puede dar una idea de la eficiencia de cada estrategia.
 
 ### Motivo del Análisis
 
-Saber cuanto es el rango de victorias para el bot rojo y azul así como también hallar los espacios disponibles y ocupados que permiten al jugador rojo obtener la victoria.
+El presente estudio se centra en un análisis exhaustivo del rendimiento y las estrategias empleadas por los bots rojo y azul en el juego Hex, con el objetivo de obtener una comprensión profunda de las dinámicas del juego y la efectividad de los algoritmos implementados. En primer lugar, se busca determinar la tasa de victoria (win rate) para ambos bots a lo largo de múltiples partidas. Este análisis no solo proporcionará un porcentaje claro de victorias para cada bot, sino que también permitirá establecer la efectividad general de cada estrategia empleada, ofreciendo insights valiosos sobre qué enfoque resulta más exitoso en el contexto del juego Hex.
+Este enfoque se dara con las siguientes areas:
 
+* Tasa de Victoria (Win Rate):
+
+  Determinar el rango de victorias para el bot rojo y el bot azul a lo largo de múltiples partidas para calcular el porcentaje de victorias de cada bot para establecer cuál estrategia es más efectiva en general.
+
+* Exploración de Nodos:
+
+  Cuantificar el número de nodos (posiciones) explorados por cada bot durante las partidas, para comparar la eficiencia de exploración entre el bot rojo (que utiliza algoritmos de búsqueda de caminos) y el bot azul (que emplea una estrategia codiciosa). Además, mapear patrones de movimientos que tienen mayor probabilidad de llevar a la victoria.
+
+* Análisis Probabilístico:
+
+  Desarrollar un modelo probabilístico para predecir las chances de victoria basado en la configuración del tablero en diferentes etapas del juego, que conllevará a calcular la probabilidad de victoria asociada a ciertas posiciones o patrones de fichas en el tablero.
+
+
+* Evaluación de Estrategias:
+
+  Analizar la efectividad de la estrategia de búsqueda de caminos del bot rojo frente a la estrategia de bloqueo del bot azul, para identificar situaciones donde una estrategia supera consistentemente a la otra. Por ello, se examinará en detalle las partidas donde la victoria se decide por un margen estrecho de tal forma q se dentificará movimientos críticos que pueden cambiar el curso del juego.
+
+<div align="center">
+  <img src="images/bluered.png" alt="Estadistic & Prob" width="700">
+</div>
+
+Este análisis exhaustivo proporcionará insights valiosos sobre las dinámicas del juego Hex y las estrategias empleadas por los bots. Los resultados pueden utilizarse para refinar los algoritmos, mejorar las estrategias de juego, y potencialmente desarrollar nuevos enfoques que combinen las fortalezas de ambas estrategias. Además, este estudio podría ofrecer perspectivas interesantes sobre la teoría de juegos y la inteligencia artificial aplicada a juegos de estrategia.
 ### Relacion con grafos
 
-Cada casilla del tablero esta representada de manera logica como un nodo, y las conexiones entre las celdas adyacentes representan las aristas de un grafo.
+El juego Hex se presta naturalmente a una representación mediante grafos, lo cual es fundamental para entender y analizar las estrategias de los bots. La relación se puede describir de la siguiente manera:
+
+* Estructura del Grafo:
+  
+  El tablero de Hex se traduce naturalmente a un grafo donde cada una de las 121 casillas del tablero 11x11 se convierte en un nodo. Las conexiones entre casillas adyacentes se representan como aristas, formando una red compleja. Las casillas internas tienen 6 vecinos, mientras que las de los bordes y esquinas tienen menos, creando una topología única que refleja fielmente la estructura del juego Hex.
+
+* Grafo No Dirigido:
+  
+  En esta representación, las  conexiones entre casillas son bidireccionales, lo que da lugar a un grafo no dirigido. Esta característica es fundamental para entender cómo los jugadores pueden moverse y conectar sus fichas en cualquier dirección, capturando la esencia de la libertad de movimiento en Hex.
+
+* Grafo Ponderado vs No Ponderado:
+  
+  En su forma más básica, el grafo del Hex es no ponderado, asignando igual importancia a todas las conexiones. Sin embargo, estrategias más sofisticadas podrían incorporar pesos en las aristas, reflejando la importancia estratégica variable de diferentes conexiones en el tablero, lo que añadiría una capa adicional de complejidad al análisis.
+
+* Subgrafos Dinámicos:
+  
+  A medida que avanza el juego, se forman subgrafos dinámicos para cada jugador. El subgrafo del jugador rojo busca conectar el borde superior con el inferior, mientras que el del azul intenta unir el izquierdo con el derecho. Estos subgrafos evolucionan con cada movimiento, representando el estado actual del juego y las posibilidades de victoria para cada jugador.
+
+* Componentes Conectados:
+  
+  El bot azul utiliza el análisis de componentes conectados para identificar y bloquear las estructuras de conexión del oponente. Este enfoque se relaciona con el concepto de componentes fuertemente conectadas en teoría de grafos, permitiendo al bot identificar áreas críticas del tablero donde puede interrumpir las estrategias del oponente. Es por ello que se implemento la estructura DisjointSet, no solo para determinar quien ganó el juego, sino determinar los caminos potenciales que empiezán a crear.
+
+* Optimización de Rutas:
+  
+  Los algoritmos empleados por los bots pueden interpretarse como problemas de optimización de rutas en grafos. Buscan el camino más eficiente para conectar sus bordes objetivo, considerando no solo la longitud del camino sino también su resistencia a los bloqueos del oponente, lo que añade una dimensión estratégica adicional al análisis del juego. Es por ello que se hizo la implemantacion de recorrido BFS con apertura de fuerza bruta para la evaluacion de los posibles caminos.
+
+<div align="center">
+  <img src="images/hex_graph.png" alt="HEX GRAPH" /*width="200"/*>
+</div>
+
 
 ## Propuesta
 
@@ -120,19 +217,6 @@ Además el sistema de turnos está basado en clicks.
 
 ```run()``` posee una complejidad de tiempo O(n^2) debido a que llama a una funcion ```render_hex_map()``` con una complejidad de tiempo O(n^2)
 
-<<<<<<< HEAD
-Algoritmo de Dijkstra adaptado al Árbol de Búsqueda de Monte Carlo (MCTS):
-* El algoritmo de Dijkstra tiene una complejidad de tiempo O((V * E) log V), donde V es el número de nodos (vértices) y E es el número de aristas en el grafo. En el caso del juego Hex, con un tablero de 11x11, tendríamos:
-
-    V = 121 (número de celdas en el tablero)
-E = aproximadamente 360 (cada celda está conectada a un máximo de 6 celdas adyacentes)
-
-    Por lo tanto, la complejidad de tiempo del algoritmo de Dijkstra en este caso sería O((121 * 360) log 121) = O(481 log 121) ≈ O(481 * 7) = O(3367), que se reduce a O(n log n), donde n representa el tamaño del problema (número de celdas en el tablero).
-
-    La complejidad de dijkstra adaptada a MCTS depende de varios factores, como la profundidad del árbol, el número de simulaciones realizadas y la complejidad de las funciones de evaluación utilizadas.
-
-    Suponiendo que se realizan k simulaciones por cada nodo del árbol, y que la complejidad de la función de evaluación es O(f(n)), donde n es el tamaño del problema (número de celdas en el tablero), la complejidad de tiempo del MCTS sería O(k * b^d * f(n)), donde b es el factor de ramificación (número máximo de jugadas posibles desde un nodo) y d es la profundidad máxima del árbol.
-=======
 ### DisjointSet.py
 
 ```__init__()``` posee una complejidad de tiempo O(n) porque inicializa con el tamaño del tablero los diccionarios rank y parent. En este n vendría a ser el número de hexágonos que componen el tablero.
@@ -154,7 +238,6 @@ Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión p
 ```def get_largest_component(self, color)``` posee una complejidad de tiempo O(n) ya que llama a una funcion ```get_connected_components()``` que posee un bucle for
 
 Verifica si los nodos auxiliares rojos o azules están conectados, lo que indicaría que un jugador ha ganado el juego. Devuelve el color del jugador ganador o None si aún no hay ganador.
->>>>>>> 125374cc90af4031e5b4d062d149e23a3fdb8662
 
 ## Validación de datos y pruebas
 

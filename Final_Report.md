@@ -106,6 +106,8 @@ Se diseña el tablero unitariamente cada hexagono con sus respectivas coordenada
 
 El uso de una función ```convert_pixel_to_hex_coords()``` es necesaria para poder aplicar DisjointSet ya que este trabaja con coordenadas. Las coordenadas de cada hexágono se emplean para identificar y manipular los nodos en la estructura de datos del Disjoint Set. Esto en el juego Hex es aplicado en forma de hexágonos que vendrían a ser los nodos.
 
+Se agregó también nuevas funciones como ```def get_connected_components(self, color)``` que obtiene los caminos del bot rojo y ```def get_largest_component(self, color)``` obtiene el mas reciente componente que ha creado el algoritmo y determinar el componente más grande. Empleando el algoritmo de Kusaragi analizando los componentes de rojo facilitamos la busqueda de los caminos más cortos.
+
 Además el sistema de turnos está basado en clicks.
 
 ### Analisis de complejidad
@@ -146,6 +148,10 @@ Toma un nodo como entrada y devuelve el representante de su conjunto. Utiliza la
 Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión por rango para mantener el árbol de conjuntos disjuntos equilibrado.
 
 ```check_win()``` posee una complejidad O(1) porque solo realiza operaciones constantes
+
+```def get_connected_components(self, color)``` posee una complejidad de tiempo O(n) porque tiene un bucle for que recorre las celdas del tablero
+
+```def get_largest_component(self, color)``` posee una complejidad de tiempo O(n) ya que llama a una funcion ```get_connected_components()``` que posee un bucle for
 
 Verifica si los nodos auxiliares rojos o azules están conectados, lo que indicaría que un jugador ha ganado el juego. Devuelve el color del jugador ganador o None si aún no hay ganador.
 >>>>>>> 125374cc90af4031e5b4d062d149e23a3fdb8662

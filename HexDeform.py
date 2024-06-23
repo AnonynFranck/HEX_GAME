@@ -25,6 +25,7 @@ class Renderer:
 
         create_graphic = self.create_hex_gfx
         self.render = self.render_hex_map
+        self.winner_written = False
 
         self.empty_node_gfx = create_graphic(None)
         self.start_node_gfx = create_graphic(self.START_HEX_COLOR)
@@ -66,13 +67,20 @@ class Renderer:
             self.screen.blit(text, rect)
 
     def draw_winner(self, width, height):
-        if self.winner:
-            text = self.font_Cracked.render(f"THE PLAYER {self.winner.upper()} IT'S WINNER!", True, (255, 255, 255))
-            rect = text.get_rect(center=(width, height))
-            self.screen.blit(text, rect)
-            legendText = self.font.render("press 'r' to return menu or 'q' to exit",True, (255, 255, 255))
-            rectL = legendText.get_rect(midbottom=(width, height*2))
-            self.screen.blit(legendText, rectL)
+        with open('ganadores.txt', 'a') as f:
+            if self.winner:
+                text = self.font_Cracked.render(f"THE PLAYER {self.winner.upper()} IT'S WINNER!", True, (255, 255, 255))
+                rect = text.get_rect(center=(width, height))
+                if not self.winner_written:
+                    f.write(f"THE PLAYER {self.winner.upper()} WINS\n")
+                    f.write(f"NODES EXPANDED BY BLUE: {self.ai_playerBlue.get_NodesB()}\n")
+                    f.write(f"NODES EXPANDED BY RED: {self.ai_playerRed.get_NodesR()}\n")
+                self.screen.blit(text, rect)
+                legendText = self.font.render("press 'r' to return menu or 'q' to exit", True, (255, 255, 255))
+                rectL = legendText.get_rect(midbottom=(width, height * 2))
+                self.screen.blit(legendText, rectL)
+                self.winner_written = True
+
 
     def get_neighbors(self, x, y):
         # Implementación para obtener los vecinos de un hexágono en las coordenadas (x, y)

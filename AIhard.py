@@ -10,6 +10,10 @@ class HardAIPlayer:
         self.starting_vertexes = [(x, 0) for x in range(self.map_size[0])]
         self.ending_vertexes = [(x, self.map_size[1] - 1) for x in range(self.map_size[0])]
         self.last_move = None
+        self.nodesR = 0
+
+    def get_NodesR(self):
+        return self.nodesR
 
     def _get_valid_moves(self):
         return [(x, y) for x in range(self.map_size[0]) for y in range(self.map_size[1])
@@ -46,6 +50,7 @@ class HardAIPlayer:
                     self.last_move = move
                     self._update_game_state(move)
                     f.write(f"Posicion del bot ROJO: {move}\n")  # Escribe la posición del bot en el archivo
+                    self.nodesR += 1
                     self.print_board()
 
     def _get_best_move(self):

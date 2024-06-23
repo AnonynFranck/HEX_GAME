@@ -2,6 +2,10 @@ class GreedyBlueAIPlayer:
     def __init__(self, game):
         self.game = game
         self.last_move = None
+        self.nodesB = 0
+
+    def get_NodesB(self):
+        return self.nodesB
 
     def make_move(self):
         if self.game.current_player == "blue" and not self.game.winner:
@@ -9,7 +13,8 @@ class GreedyBlueAIPlayer:
             print("MOVE: ", move)
             if move and move not in self.game.occupied_positions:
                 self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))
-                self.last_move = move # Last move
+                self.last_move = move
+                self.nodesB += 1
 
     def _get_best_move(self):
         red_component = self.game.disjoint_set.get_largest_component("red")

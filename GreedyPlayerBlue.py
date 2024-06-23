@@ -2,7 +2,7 @@ class GreedyBlueAIPlayer:
     def __init__(self, game):
         self.game = game
         self.last_move = None
-        self.nodesB = 0
+        self.nodesB = 0 # B Nodes
 
     def get_NodesB(self):
         return self.nodesB

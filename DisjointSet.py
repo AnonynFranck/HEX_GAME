@@ -59,7 +59,6 @@ class DisjointSet:
             return "blue"
 
         return None
-    # ADD FOR PLAYER BLUE
 
     def get_connected_components(self, color):
         components = {}
@@ -79,32 +78,4 @@ class DisjointSet:
 
     def get_largest_component(self, color):
         components = self.get_connected_components(color)
-        # 1print("LISTAS MAS LARGAS: ", [viewL for viewL in components.values() if len(viewL)>1])
         return max(components.values(), key=len) if components else []
-
-""" detect invert (winner red horizontal)
-        # Nodos auxiliares para las columnas 0 y última (para el rojo)
-        self.red_left_node = (-1, -1)
-        self.red_right_node = (-2, -2)
-
-        # Nodos auxiliares para las filas 0 y última (para el azul)
-        self.blue_top_node = (-3, -3)
-        self.blue_bottom_node = (-4, -4)
-
-        self.parent[self.red_left_node] = self.red_left_node
-        self.rank[self.red_left_node] = 0
-        self.parent[self.red_right_node] = self.red_right_node
-        self.rank[self.red_right_node] = 0
-        self.parent[self.blue_top_node] = self.blue_top_node
-        self.rank[self.blue_top_node] = 0
-        self.parent[self.blue_bottom_node] = self.blue_bottom_node
-        self.rank[self.blue_bottom_node] = 0
-    def check_win(self):
-        # Verificar si los nodos auxiliares rojos están conectados (victoria vertical)
-        if self.find(self.red_left_node) == self.find(self.red_right_node):
-            return "red"
-
-        # Verificar si los nodos auxiliares azules están conectados (victoria horizontal)
-        if self.find(self.blue_top_node) == self.find(self.blue_bottom_node):
-            return "blue"
-"""

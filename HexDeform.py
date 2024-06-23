@@ -253,8 +253,6 @@ class Renderer:
                         self.disjoint_set.union((x, y), neighbor)
 
             self.occupied_positions.add((x, y))
-            print("OCUPADOS: ", self.occupied_positions)
-            print(f"TAMANHO Posiciones ocupadas: {len(self.occupied_positions)}")
             self.current_player = "blue" if self.current_player == "red" else "red"
 
             self.winner = self.disjoint_set.check_win()
@@ -292,10 +290,10 @@ class Renderer:
                 self.ai_player.make_move()
             elif self.difficulty == "Bot(Blue) vs Bot(Red)":
                 if self.current_player == "red":
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     self.ai_playerRed.make_move()
                 elif self.current_player == "blue":
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     self.ai_playerBlue.make_move()
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)

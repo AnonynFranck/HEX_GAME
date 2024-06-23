@@ -18,10 +18,10 @@ class GreedyBlueAIPlayer:
 
     def _get_best_move(self):
         red_component = self.game.disjoint_set.get_largest_component("red")
-        print("RED_COMPONENT: ", red_component)
+        #print("RED_COMPONENT: ", red_component)
         if red_component:
             blocking_move = self._find_blocking_move(red_component)
-            print("FIND_ADVANCING_MOVE: ", blocking_move)
+            #print("FIND_ADVANCING_MOVE: ", blocking_move)
             if blocking_move:
                 return blocking_move
         return self._find_advancing_move()
@@ -54,7 +54,7 @@ class GreedyBlueAIPlayer:
 
     def _find_advancing_move(self):
         blue_component = self.game.disjoint_set.get_largest_component("blue")
-        print("BLUE_COMPONENT: ", blue_component)
+        #print("BLUE_COMPONENT: ", blue_component)
         if not blue_component:
             return (self.game.map_size[0] // 2, self.game.map_size[1] // 2)
         

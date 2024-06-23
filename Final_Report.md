@@ -58,7 +58,7 @@ En este proyecto, nos enfocaremos en el desarrollo de un bot (jugador rojo) que 
 Aunque nuestro enfoque principal no será la implementación completa del algoritmo de Monte Carlo Tree Search (MCTS), tomaremos algunas ideas y conceptos clave de este enfoque. Por ejemplo, utilizaremos simulaciones y rollouts para explorar las posibles jugadas y evaluar su efectividad, lo que contribuirá a mejorar la calidad y efectividad del bot en el juego. Por esa razon esta combinación de técnicas proporcionará al bot la capacidad de analizar el tablero de manera eficiente, simular movimientos potenciales y tomar decisiones estratégicas en cada turno, adaptándose a las jugadas del oponente y buscando la conexión ganadora óptima.
 
 <div align="center">
-  <img src="images/GR7qf.png" alt="MONTE CARLO TREE SEARCH" /*width="200"*/>
+  <img src="images/GR7qf.png" alt="MONTE CARLO TREE SEARCH"> /*width="200"*/>
 </div>
 
 
@@ -182,7 +182,7 @@ El juego Hex se presta naturalmente a una representación mediante grafos, lo cu
   Los algoritmos empleados por los bots pueden interpretarse como problemas de optimización de rutas en grafos. Buscan el camino más eficiente para conectar sus bordes objetivo, considerando no solo la longitud del camino sino también su resistencia a los bloqueos del oponente, lo que añade una dimensión estratégica adicional al análisis del juego. Es por ello que se hizo la implemantacion de recorrido BFS con apertura de fuerza bruta para la evaluacion de los posibles caminos.
 
 <div align="center">
-  <img src="images/hex_graph.png" alt="HEX GRAPH" /*width="200"/*>
+  <img src="images/hex_graph.png" alt="HEX GRAPH"> /*width="200"/*>
 </div>
 
 
@@ -245,18 +245,18 @@ Se realizarán múltiples partidas entre los bots para recopilar datos sobre sus
 
 ## Diseño del aplicativo
 
-Hemos utilizado la estructura Disjoints o conjuntos disjuntos para realizar y a su vez detectar las uniones de extremo a extremo con las fichas del jugador correspondiente implementando la finalidad del juego, esto mediante nodos auxiliares, dos para el rojo y otros dos para azul. Estos nodos son inicializados en el main. Los extremos están conectados a los nodos auxiliares correspondientes teniendo como complejidad O(1).
+* Hemos utilizado la estructura Disjoints o conjuntos disjuntos para realizar y a su vez detectar las uniones de extremo a extremo con las fichas del jugador correspondiente implementando la finalidad del juego, esto mediante nodos auxiliares, dos para el rojo y otros dos para azul. Estos nodos son inicializados en el main. Los extremos están conectados a los nodos auxiliares correspondientes teniendo como complejidad O(1).
 
-También se han empleado funciones de pygame para el dibujo de polígonos y sus contornos como ```pygame.draw.polygon()```, tomando como referencia las coordenadas y el tamaño que tendrá cada hexágono. ```pygame.draw.line()``` para la creación de las líneas que unen los hexágonos. ```pygame.display.flip()``` para mostrar los cambios en la pantalla.
+* También se han empleado funciones de pygame para el dibujo de polígonos y sus contornos como ```pygame.draw.polygon()```, tomando como referencia las coordenadas y el tamaño que tendrá cada hexágono. ```pygame.draw.line()``` para la creación de las líneas que unen los hexágonos. ```pygame.display.flip()``` para mostrar los cambios en la pantalla.
 
-Se diseña el tablero unitariamente cada hexagono con sus respectivas coordenadas como si de un plano cartesiano invertido se tratase tratandolos de manera lógica como si fueran nodos pero representandolos como un tablero de hexágonos.
+* Se diseña el tablero unitariamente cada hexagono con sus respectivas coordenadas como si de un plano cartesiano invertido se tratase tratandolos de manera lógica como si fueran nodos pero representandolos como un tablero de hexágonos.
 
-El uso de una función ```convert_pixel_to_hex_coords()``` es necesaria para poder aplicar DisjointSet ya que este trabaja con coordenadas. Las coordenadas de cada hexágono se emplean para identificar y manipular los nodos en la estructura de datos del Disjoint Set. Esto en el juego Hex es aplicado en forma de hexágonos que vendrían a ser los nodos.
+* El uso de una función ```convert_pixel_to_hex_coords()``` es necesaria para poder aplicar DisjointSet ya que este trabaja con coordenadas. Las coordenadas de cada hexágono se emplean para identificar y manipular los nodos en la estructura de datos del Disjoint Set. Esto en el juego Hex es aplicado en forma de hexágonos que vendrían a ser los nodos.
 
-Se agregó también nuevas funciones como ```def get_connected_components(self, color)``` que obtiene los caminos del bot rojo y ```def get_largest_component(self, color)``` obtiene el mas reciente componente que ha creado el algoritmo y determinar el componente más grande. Empleando el algoritmo de Kusaragi analizando los componentes de rojo facilitamos la busqueda de los caminos más cortos.
+* Se agregó también nuevas funciones como ```def get_connected_components(self, color)``` que obtiene los caminos del bot rojo y ```def get_largest_component(self, color)``` obtiene el mas reciente componente que ha creado el algoritmo y determinar el componente más grande. Empleando el algoritmo de Kusaragi analizando los componentes de rojo facilitamos la busqueda de los caminos más cortos.
 
 
-También se ha utilizado un algoritmo BFS para detectar el camino más corto que se pueda crear y que conecte a los extremos de cada lado del tablero.
+También se ha utilizado un algoritmo DFS para detectar el camino más corto que se pueda crear y que conecte a los extremos de cada lado del tablero.
 
 La funcion que utiliza este algoritmo es ```_get_shortest_path(self, start, end)``` que recibe como parametros el nodo de inicio y fin el cual luego es almacenado en una cola ```queue``` que sirve para almacenar vértices a visitar y visited que es un conjunto que se utiliza para almacenar los vértices que ya han sido visitados. 
 

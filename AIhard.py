@@ -36,6 +36,7 @@ class HardAIPlayer:
     def make_move(self):
         with open('movimientos.txt', 'a') as f:  # Abre el archivo en modo de escritura
             if self.game.current_player == "red" and not self.game.winner:
+                f.write("Turno del bot ROJO\n")
                 f.write("Movimientos posibles antes de decidir:\n")
                 for move in self._get_valid_moves():
                     f.write(str(move) + "\n")  # Escribe el movimiento en el archivo

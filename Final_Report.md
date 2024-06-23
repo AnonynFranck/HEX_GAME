@@ -75,6 +75,22 @@ Sin embargo, es importante tener en cuenta que este cálculo asume que todas las
 
 En la práctica, el número real de nodos en el árbol de decisiones será menor, ya que algunas jugadas serán descartadas por ser inválidas o poco prometedoras. Además, el uso del algoritmo de Dijkstra para encontrar la ruta más corta entre las fichas del bot, junto con la poda del árbol de decisiones basada en heurísticas y evaluaciones, reducirá aún más el tamaño efectivo del árbol de decisiones.
 
+### Origen de los Datos
+
+Los datos se generan en cuanto uno de los bots realiza un movimiento durante la compilación del programa. Primero se guarda en un archivo de texto los espacios posibles que el algoritmo considero. Luego se guarda la posición que el bot eligió y finalmente el mejor camino posible empezando por el nodo inicial.
+
+
+
+### Motivo del Análisis
+
+
+Hallar la probabilidad de que el bot gane el juego en base a las jugadas que realiza y las posibles jugadas. Además, se busca analizar la eficiencia del algoritmo de Dijkstra en la búsqueda de la ruta más corta entre las fichas del bot y cómo se puede combinar con un árbol de decisiones para tomar decisiones estratégicas en el juego Hex.
+
+
+### Relacion con grafos
+
+
+
 ## Propuesta
 
 Se usará DFS en lugar de BFS, ya que, BFS usa una búsqueda por anchura con una cierta eficacia en buscar el camino más corto, algo que a comparación de DFS es mucho más ineficiente, ya que para este caso lo que se busca es evaluar las posibles rutas y escenarios. En hex todos tienen el mismo peso pero mientras se van eliminando los nodos el peso de estos va cambiando.

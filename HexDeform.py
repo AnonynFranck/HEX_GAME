@@ -49,24 +49,12 @@ class Renderer:
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)
 
-<<<<<<< HEAD
-        if difficulty == "Easy (BFS)":
-            self.ai_player = HardAIPlayer(self)
-        elif difficulty == "Normal (Dijkstra)":
-            self.ai_player = HardAIPlayer(self)
-        elif difficulty == "Hard (Monte Carlo Tree Search)":
-            self.ai_player = HardAIPlayer(self)
-    
-        #self.window_width = default_width
-        #self.window_height = default_height
-=======
         if difficulty == "Player(Blue) vs Player(Red)":
             self.ai_player = PlayerH(self)
         elif difficulty == "Bot(Blue) vs Bot(Red)":
             self.ai_playerRed = HardAIPlayer(self)
             self.ai_playerBlue = GreedyBlueAIPlayer(self)
 
->>>>>>> 67889df8c1254005f21c050530f5fcc847cda41f
         self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
 
         self.disjoint_set = DisjointSet(self) #Inicializando estructura DisjoinSet

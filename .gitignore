@@ -1,4 +1,9 @@
 __pycache__/
 secret2
 secret.pub
+<<<<<<< HEAD
 temp.py
+=======
+movimientos.txt
+Testing.py
+>>>>>>> 67889df8c1254005f21c050530f5fcc847cda41f

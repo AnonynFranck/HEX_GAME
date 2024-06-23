@@ -1,7 +1,10 @@
 import pygame
 from AIhard import HardAIPlayer
-from DisjointSet import *
+from DisjointSet import DisjointSet
+from GreedyPlayerBlue import GreedyBlueAIPlayer
+from PlayerH import PlayerH
 import sys
+import time
 
 class Renderer:
     START_HEX_COLOR_BLUE = pygame.Color(0, 0, 100)
@@ -22,6 +25,7 @@ class Renderer:
 
         create_graphic = self.create_hex_gfx
         self.render = self.render_hex_map
+        self.winner_written = False
 
         self.empty_node_gfx = create_graphic(None)
         self.start_node_gfx = create_graphic(self.START_HEX_COLOR)
@@ -45,6 +49,7 @@ class Renderer:
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)
 
+<<<<<<< HEAD
         if difficulty == "Easy (BFS)":
             self.ai_player = HardAIPlayer(self)
         elif difficulty == "Normal (Dijkstra)":
@@ -54,9 +59,17 @@ class Renderer:
     
         #self.window_width = default_width
         #self.window_height = default_height
+=======
+        if difficulty == "Player(Blue) vs Player(Red)":
+            self.ai_player = PlayerH(self)
+        elif difficulty == "Bot(Blue) vs Bot(Red)":
+            self.ai_playerRed = HardAIPlayer(self)
+            self.ai_playerBlue = GreedyBlueAIPlayer(self)
+
+>>>>>>> 67889df8c1254005f21c050530f5fcc847cda41f
         self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
 
-        self.disjoint_set = DisjointSet(self.map_size) #Inicializando estructura DisjoinSet
+        self.disjoint_set = DisjointSet(self) #Inicializando estructura DisjoinSet
         self.winner = None  # Para almacenar al WINNER
 
     def draw_current_player(self):
@@ -66,13 +79,20 @@ class Renderer:
             self.screen.blit(text, rect)
 
     def draw_winner(self, width, height):
-        if self.winner:
-            text = self.font_Cracked.render(f"THE PLAYER {self.winner.upper()} IT'S WINNER!", True, (255, 255, 255))
-            rect = text.get_rect(center=(width, height))
-            self.screen.blit(text, rect)
-            legendText = self.font.render("press 'r' to return menu or 'q' to exit",True, (255, 255, 255))
-            rectL = legendText.get_rect(midbottom=(width, height*2))
-            self.screen.blit(legendText, rectL)
+        with open('ganadores.txt', 'a') as f:
+            if self.winner:
+                text = self.font_Cracked.render(f"THE PLAYER {self.winner.upper()} IT'S WINNER!", True, (255, 255, 255))
+                rect = text.get_rect(center=(width, height))
+                if not self.winner_written:
+                    f.write(f"THE PLAYER {self.winner.upper()} WINS\n")
+                    f.write(f"NODES EXPANDED BY BLUE: {self.ai_playerBlue.get_NodesB()}\n")
+                    f.write(f"NODES EXPANDED BY RED: {self.ai_playerRed.get_NodesR()}\n")
+                self.screen.blit(text, rect)
+                legendText = self.font.render("press 'r' to return menu or 'q' to exit", True, (255, 255, 255))
+                rectL = legendText.get_rect(midbottom=(width, height * 2))
+                self.screen.blit(legendText, rectL)
+                self.winner_written = True
+
 
     def get_neighbors(self, x, y):
         # Implementación para obtener los vecinos de un hexágono en las coordenadas (x, y)
@@ -136,8 +156,13 @@ class Renderer:
         x_pos -= board_x
         y_pos -= board_y
 
-        y = y_pos // (g * 0.75)
-        x = (x_pos - y * (g // 2)) // g
+        if self.difficulty == "Player(Blue) vs Player(Red)":
+            y = y_pos // (g * 0.75)
+            x = (x_pos - y * (g // 2)) // g
+        else:
+            # Ajustar el cálculo de las coordenadas
+            y = int((y_pos / (g * 0.75)))
+            x = int((x_pos - (y % 2) * g / 2) / g)
 
         return x, y
 
@@ -153,7 +178,6 @@ class Renderer:
 
         x_blit = board_x + (x * g) + (g // 2 * (y % 2))
         y_blit = board_y + (y * g * 0.75)
-
         return x_blit, y_blit
 
     def render_hex_map(self, path_blue, path_red):
@@ -229,6 +253,7 @@ class Renderer:
         x, y = self.convert_pixel_to_hex_coords(pos)
         if self.is_valid_hex_coords(x, y) and (x, y) not in self.occupied_positions:
             if self.current_player == "red":
+                print(f"Posicion del jugador rojo: {x}, {y}")
                 self.red_player_positions.add((x, y))
                 if y == 0:
                     self.disjoint_set.union((x, y), self.disjoint_set.red_top_node)
@@ -281,7 +306,15 @@ class Renderer:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_mouse_click(event.pos)
             # Realizar movimiento del bot
-            self.ai_player.make_move()
+            if self.difficulty == "Player(Blue) vs Player(Red)":
+                self.ai_player.make_move()
+            elif self.difficulty == "Bot(Blue) vs Bot(Red)":
+                if self.current_player == "red":
+                    time.sleep(0.3)
+                    self.ai_playerRed.make_move()
+                elif self.current_player == "blue":
+                    time.sleep(0.3)
+                    self.ai_playerBlue.make_move()
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
             # self.print_player_positions()

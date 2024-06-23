@@ -304,7 +304,7 @@ Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión p
 
 ```def render_hex_map()``` posee una complejidad de tiempo O(n^2)
 
-```def run()```
+```def run()``` es la funcion que llama a las demás funciones para ejecutar el juego.
 
 ## Validación de datos y pruebas
 

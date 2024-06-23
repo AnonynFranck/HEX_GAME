@@ -136,9 +136,13 @@ class Renderer:
         x_pos -= board_x
         y_pos -= board_y
 
-        # Ajustar el cálculo de las coordenadas
-        y = int((y_pos / (g * 0.75)))
-        x = int((x_pos - (y % 2) * g / 2) / g)
+        if self.difficulty == "Player(Blue) vs Player(Red)":
+            y = y_pos // (g * 0.75)
+            x = (x_pos - y * (g // 2)) // g
+        else:
+            # Ajustar el cálculo de las coordenadas
+            y = int((y_pos / (g * 0.75)))
+            x = int((x_pos - (y % 2) * g / 2) / g)
 
         return x, y
 

@@ -215,6 +215,7 @@ Emplea una estrategia codiciosa (greedy) con ayuda de análisis de componentes.
 <p align="center">
   <img src="images/OhhWl.gif" width="400">
 </p>
+
 #### Detección de Victoria:
 
 Se utiliza la función check_win de DisjointSet para determinar si algún jugador ha ganado.

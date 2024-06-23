@@ -9,7 +9,7 @@ class GreedyBlueAIPlayer:
             print("MOVE: ", move)
             if move and move not in self.game.occupied_positions:
                 self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))
-                self.last_move = move
+                self.last_move = move # Last move
 
     def _get_best_move(self):
         red_component = self.game.disjoint_set.get_largest_component("red")

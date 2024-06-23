@@ -1,8 +1,9 @@
 class DisjointSet:
-    def __init__(self, map_size):
+    def __init__(self, game):
         self.parent = {}
         self.rank = {}
-        self.map_width, self.map_height = map_size
+        self.map_width, self.map_height = game.map_size
+        self.game = game
 
         # Nodos auxiliares para las filas 0 y última
         self.red_top_node = (-1, -1)
@@ -58,6 +59,28 @@ class DisjointSet:
             return "blue"
 
         return None
+    # ADD FOR PLAYER BLUE
+
+    def get_connected_components(self, color):
+        components = {}
+        for y in range(self.map_height):
+            for x in range(self.map_width):
+                if (x, y) in self.game.red_player_positions and color == "red":
+                    root = self.find((x, y))
+                    if root not in components:
+                        components[root] = []
+                    components[root].append((x, y))
+                elif (x, y) in self.game.blue_player_positions and color == "blue":
+                    root = self.find((x, y))
+                    if root not in components:
+                        components[root] = []
+                    components[root].append((x, y))
+        return components
+
+    def get_largest_component(self, color):
+        components = self.get_connected_components(color)
+        # 1print("LISTAS MAS LARGAS: ", [viewL for viewL in components.values() if len(viewL)>1])
+        return max(components.values(), key=len) if components else []
 
 """ detect invert (winner red horizontal)
         # Nodos auxiliares para las columnas 0 y última (para el rojo)

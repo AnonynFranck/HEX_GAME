@@ -1,7 +1,8 @@
 import pygame
 from AIhard import HardAIPlayer
-from DisjointSet import *
+from DisjointSet import DisjointSet
 from GreedyPlayerBlue import GreedyBlueAIPlayer
+from PlayerH import PlayerH
 import sys
 import time
 
@@ -47,17 +48,15 @@ class Renderer:
         self.font = pygame.font.Font("fonts/mytype.ttf",48)
         self.font_Cracked = pygame.font.Font("fonts/MH.ttf",85)
 
-        if difficulty == "Easy (BFS)":
-            self.ai_player = HardAIPlayer(self)
-        elif difficulty == "Normal (Dijkstra)":
-            self.ai_player = HardAIPlayer(self)
-        elif difficulty == "Hard (Monte Carlo Tree Search)":
+        if difficulty == "Player(Blue) vs Player(Red)":
+            self.ai_player = PlayerH(self)
+        elif difficulty == "Bot(Blue) vs Bot(Red)":
             self.ai_playerRed = HardAIPlayer(self)
             self.ai_playerBlue = GreedyBlueAIPlayer(self)
 
         self.occupied_positions = set()  # Conjunto para almacenar posiciones ocupadas
 
-        self.disjoint_set = DisjointSet(self.map_size) #Inicializando estructura DisjoinSet
+        self.disjoint_set = DisjointSet(self) #Inicializando estructura DisjoinSet
         self.winner = None  # Para almacenar al WINNER
 
     def draw_current_player(self):
@@ -285,12 +284,15 @@ class Renderer:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_mouse_click(event.pos)
             # Realizar movimiento del bot
-            if self.current_player == "red":
-                time.sleep(0.5)
-                self.ai_playerRed.make_move()
-            elif self.current_player == "blue":
-                time.sleep(0.5)
-                self.ai_playerBlue.make_move()
+            if self.difficulty == "Player(Blue) vs Player(Red)":
+                self.ai_player.make_move()
+            elif self.difficulty == "Bot(Blue) vs Bot(Red)":
+                if self.current_player == "red":
+                    time.sleep(0.5)
+                    self.ai_playerRed.make_move()
+                elif self.current_player == "blue":
+                    time.sleep(0.5)
+                    self.ai_playerBlue.make_move()
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
             # self.print_player_positions()

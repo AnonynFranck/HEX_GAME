@@ -95,11 +95,6 @@ Se usará DFS en lugar de BFS, ya que, BFS usa una búsqueda por anchura con una
 
 Con respecto a los dataset el algoritmo que nos proporcionará muchos más datos será el DFS porque mediante fuerza bruta evaluará los 121 posibles caminos del tablero y 3721 posibles nodos.
 
-También se contempla implementar el algoritmo de Dijkstra para encontrar el camino más corto mediante un árbol de decisiones enfocado en Monte Carlo Tree Search el cual hará uso del Backtracking como estrategia de recorrido en profundidad. Este algoritmo reduce su cantidad de posibles nodos que con DFS serían 3721 haciéndolo mucho más eficiente.
-
-A comparación de BFS, Dijkstra es mucho más eficiente, ya que, a pesar de que BFS se enfoca en encontrar el camino más corto, Dijkstra se enfoca en encontrar el camino más corto y además el más eficiente para conectar los lados opuestos del tablero. Por lo que Dijkstra generara menos contenido en el dataset.
-
-Además mediante programación dinámica y algoritmos greedy se realizará la poda de los arboles de decisión para reducir la cantidad de nodos y así hacer más eficiente el algoritmo.
 
 ## Diseño del aplicativo
 

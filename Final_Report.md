@@ -188,9 +188,10 @@ El juego Hex se presta naturalmente a una representación mediante grafos, lo cu
 
 ## Propuesta
 
-Se usará DFS en lugar de BFS, ya que, BFS usa una búsqueda por anchura con una cierta eficacia en buscar el camino más corto, algo que a comparación de DFS es mucho más ineficiente, ya que para este caso lo que se busca es evaluar las posibles rutas y escenarios. En hex todos tienen el mismo peso pero mientras se van eliminando los nodos el peso de estos va cambiando.
+Para el bot rojo se usará BFS, ya que, BFS usa una búsqueda por anchura con una cierta eficacia en buscar el camino más corto, para este caso lo que se busca es evaluar las posibles rutas y escenarios tratando de buscar el camino mas corto por lo que sería lo más óptimo. En hex todos tienen el mismo peso pero mientras se van eliminando los nodos el peso de estos va cambiando.
 
-Con respecto a los dataset el algoritmo que nos proporcionará muchos más datos será el DFS porque mediante fuerza bruta evaluará los 121 posibles caminos del tablero y 3721 posibles nodos.
+Con respecto a los dataset el algoritmo que nos proporcionará muchos más datos será el BFS porque mediante la busqueda por anchura se podrá obtener posibles caminos cortos.
+
 
 
 ## Diseño del aplicativo
@@ -205,7 +206,12 @@ El uso de una función ```convert_pixel_to_hex_coords()``` es necesaria para pod
 
 Se agregó también nuevas funciones como ```def get_connected_components(self, color)``` que obtiene los caminos del bot rojo y ```def get_largest_component(self, color)``` obtiene el mas reciente componente que ha creado el algoritmo y determinar el componente más grande. Empleando el algoritmo de Kusaragi analizando los componentes de rojo facilitamos la busqueda de los caminos más cortos.
 
-Además el sistema de turnos está basado en clicks.
+
+También se ha utilizado un algoritmo BFS para detectar el camino más corto que se pueda crear y que conecte a los extremos de cada lado del tablero.
+
+La funcion que utiliza este algoritmo es ```_get_shortest_path(self, start, end)``` que recibe como parametros el nodo de inicio y fin el cual luego es almacenado en una cola ```queue``` que sirve para almacenar vértices a visitar y visited que es un conjunto que se utiliza para almacenar los vértices que ya han sido visitados. 
+
+Mediante un bucle ```while``` que ocurre hasta que la cola esté vacía, en cada iteración del bucle se toma un vértice de la cola y se explora. Si el vértice es el vértice final se vuelve el camino hasta dicho vertice, caso contrario se agregan los vertices no visitados de la cola para explorarlos en las iteraciones posteriores
 
 ### Analisis de complejidad
 
@@ -217,6 +223,22 @@ Además el sistema de turnos está basado en clicks.
 
 ```run()``` posee una complejidad de tiempo O(n^2) debido a que llama a una funcion ```render_hex_map()``` con una complejidad de tiempo O(n^2)
 
+<<<<<<< HEAD
+=======
+
+Algoritmo de Dijkstra adaptado al Árbol de Búsqueda de Monte Carlo (MCTS):
+* El algoritmo de Dijkstra tiene una complejidad de tiempo O((V * E) log V), donde V es el número de nodos (vértices) y E es el número de aristas en el grafo. En el caso del juego Hex, con un tablero de 11x11, tendríamos:
+
+    V = 121 (número de celdas en el tablero)
+E = aproximadamente 360 (cada celda está conectada a un máximo de 6 celdas adyacentes)
+
+    Por lo tanto, la complejidad de tiempo del algoritmo de Dijkstra en este caso sería O((121 * 360) log 121) = O(481 log 121) ≈ O(481 * 7) = O(3367), que se reduce a O(n log n), donde n representa el tamaño del problema (número de celdas en el tablero).
+
+    La complejidad de dijkstra adaptada a MCTS depende de varios factores, como la profundidad del árbol, el número de simulaciones realizadas y la complejidad de las funciones de evaluación utilizadas.
+
+    Suponiendo que se realizan k simulaciones por cada nodo del árbol, y que la complejidad de la función de evaluación es O(f(n)), donde n es el tamaño del problema (número de celdas en el tablero), la complejidad de tiempo del MCTS sería O(k * b^d * f(n)), donde b es el factor de ramificación (número máximo de jugadas posibles desde un nodo) y d es la profundidad máxima del árbol.
+=======
+>>>>>>> 606f44fab260d203ccbce9c0d244fd7cbbcffa12
 ### DisjointSet.py
 
 ```__init__()``` posee una complejidad de tiempo O(n) porque inicializa con el tamaño del tablero los diccionarios rank y parent. En este n vendría a ser el número de hexágonos que componen el tablero.
@@ -238,6 +260,29 @@ Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión p
 ```def get_largest_component(self, color)``` posee una complejidad de tiempo O(n) ya que llama a una funcion ```get_connected_components()``` que posee un bucle for
 
 Verifica si los nodos auxiliares rojos o azules están conectados, lo que indicaría que un jugador ha ganado el juego. Devuelve el color del jugador ganador o None si aún no hay ganador.
+<<<<<<< HEAD
+=======
+
+### AIhard.py
+
+```__init__(self, game)``` posee una complejidad de tiempo O(n) donde n es el numero de celdas en el tablero
+
+```get_NodesR(self)``` posee una complejidad de tiempo O(1) debido a que solo devuelve el valor de un atributo de la instancia de clase
+
+```_get_valid_moves(self)``` posee una complejidad de tiempo de O(n) donde n es el numero de celdas en el tablero
+
+```print_board(self)``` posee una complejidad de tiempo O(n) debido a que recorre todas las celdas del tablero en un bucle anidado 
+
+```_create_adj_map(self)``` posee una complejidad de tiempo O(n) donde n es el número de celdas en el tablero debido a que recorre las celdas del tablero en un bucle 
+
+```make_move(self)``` tiene una complejidad de tiempo O(n^2) debido a que se llama a la funcion _get_best_move() que a su vez llama a la funcion _get_shortest_path()  la cual tiene una complejidad de tiempo O(n^2) ya que utiliza un algoritmo BFS
+
+```_get_best_move(self)``` posee una complejidad de tiempo O(n^2) debido a que se llama a la funcion _get_shortest_path() que tiene una complejidad de tiempo O(n^2)
+
+```_get_shortest_path(self, start, end``` posee una complejidad de tiempo de O(n^2) donde n es el numeor de celdas en el tablero ya que utiliza un algoritmo de BFS para encontrar el camino más corto entre dos puntos del tablero.
+
+```_update_game_state(self, move)``` tiene una complejidad de tiempo O(1) ya que es de tiempo constante
+>>>>>>> 606f44fab260d203ccbce9c0d244fd7cbbcffa12
 
 ## Validación de datos y pruebas
 

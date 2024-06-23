@@ -187,11 +187,57 @@ El juego Hex se presta naturalmente a una representación mediante grafos, lo cu
 
 
 ## Propuesta
+El objetivo principal de esta propuesta es desarrollar, implementar y analizar estrategias eficientes para bots que jueguen al Hex, un juego de estrategia de conexión. Se busca crear bots que puedan tomar decisiones inteligentes, anticipar movimientos del oponente y establecer conexiones efectivas en el tablero donde se detallara cual sera la intension de cada uno de las fichas.
+### Técnicas y Metodologías Utilizadas:
 
-Para el bot rojo se usará BFS, ya que, BFS usa una búsqueda por anchura con una cierta eficacia en buscar el camino más corto, para este caso lo que se busca es evaluar las posibles rutas y escenarios tratando de buscar el camino mas corto por lo que sería lo más óptimo. En hex todos tienen el mismo peso pero mientras se van eliminando los nodos el peso de estos va cambiando.
+#### Estructura de Datos Disjoint Set:
 
-Con respecto a los dataset el algoritmo que nos proporcionará muchos más datos será el BFS porque mediante la busqueda por anchura se podrá obtener posibles caminos cortos.
+Se implementa una estructura de conjuntos disjuntos (DisjointSet) para manejar eficientemente las conexiones en el tablero.
+Esta estructura permite:
+* Detectar rápidamente componentes conectados para el jugador rojo, identificando posibles caminos.
+* Determinar el ganador utilizando nodos auxiliares para los bordes del tablero.
 
+
+#### Bot Rojo (HardAIPlayer):
+
+Utiliza una estrategia de fuerza bruta basada en DFS (Depth-First Search) evaluando el conjunto de estados finales si es que llegue a una de ellas, de esa forma probando las demas posiblidades.
+* Explora sistemáticamente todos los caminos posibles desde su posición actual hasta el borde opuesto con la finalidad de intenta crear y extender caminos para completar una conexión entre los bordes superior e inferior utiliza la estructura DisjointSet para usar la conectividad y detectar caminos potenciales. Además, al usar un recorrido por profundidad nos permite prevenir obstaculos que se presenten usando backtracking.
+
+<p align="center">
+  <img src="images/BFS2.gif" width="400">
+</p>
+
+#### Bot Azul (GreedyBlueAIPlayer):
+
+Emplea una estrategia codiciosa (greedy) con ayuda de análisis de componentes.
+* Utiliza la `función get_largest_component` de DisjointSet para identificar el componente conectado más grande del jugador rojo, lo cual  prioriza bloquear el avance del componente más grande del oponente.
+* Si no puede bloquear directamente, busca avanzar hacia su propio objetivo de conectar los bordes izquierdo y derecho. Aprovechando esta estrategia, su proposito principalmente es bloquear al jugador rojo. Para ello se implemento un sistema de componentes conectados para identificar y obstruir los caminos potenciales del oponente, teniendo en cuenta que mientras bloquea buscará avanzar hacia su propio objetivo de conectar los bordes izquierdo y derecho del tablero.
+<p align="center">
+  <img src="images/OhhWl.gif" width="400">
+</p>
+#### Detección de Victoria:
+
+Se utiliza la función check_win de DisjointSet para determinar si algún jugador ha ganado.
+Los nodos auxiliares (`red_top_node`, `red_bottom_node`, `blue_left_node`, `blue_right_node`) permiten una verificación eficiente de la victoria al comprobar si los bordes opuestos están conectados.
+
+
+#### Análisis de Componentes Conectados:
+
+La función `get_connected_components` de DisjointSet se utiliza para analizar la estructura del tablero y las posiciones de las fichas.
+Esto permite a los bots evaluar la fortaleza de sus posiciones y las del oponente.
+
+
+
+#### Metodología de Evaluación:
+
+Se realizarán múltiples partidas entre los bots para recopilar datos sobre sus tasas de victoria, eficiencia en la toma de decisiones y patrones de juego. También, se analizará la efectividad de las estrategias de cada bot en diferentes etapas del juego, de esta forma, recopilando y estudiando la capacidad de los bots para adaptarse a las estrategias del oponente. Además, medirá el rendimiento computacional de los algoritmos utilizados, considerando el tiempo de respuesta y la cantidad de nodos explorados en cada turno.
+
+#### Resultados Esperados:
+
+* Determinar la eficacia relativa de las estrategias de fuerza bruta (Bot Rojo) versus la estrategia codiciosa (Bot Azul) en el contexto del juego Hex . Con ello se esperara que la tasa de victorias la tenga el bot azul, por una simple razón de tener una estrategia defensiva y ofensiva a la vez, por lo mensionado anteriormente.
+* Identificar patrones de juego exitosos y situaciones críticas que influyen significativamente en el resultado de las partidas.
+* Proporcionar insights sobre posibles mejoras y refinamientos en las estrategias de los bots.
+* Evaluar la escalabilidad de los algoritmos utilizados para tableros de diferentes tamaños.
 
 
 ## Diseño del aplicativo
@@ -223,22 +269,6 @@ Mediante un bucle ```while``` que ocurre hasta que la cola esté vacía, en cada
 
 ```run()``` posee una complejidad de tiempo O(n^2) debido a que llama a una funcion ```render_hex_map()``` con una complejidad de tiempo O(n^2)
 
-<<<<<<< HEAD
-=======
-
-Algoritmo de Dijkstra adaptado al Árbol de Búsqueda de Monte Carlo (MCTS):
-* El algoritmo de Dijkstra tiene una complejidad de tiempo O((V * E) log V), donde V es el número de nodos (vértices) y E es el número de aristas en el grafo. En el caso del juego Hex, con un tablero de 11x11, tendríamos:
-
-    V = 121 (número de celdas en el tablero)
-E = aproximadamente 360 (cada celda está conectada a un máximo de 6 celdas adyacentes)
-
-    Por lo tanto, la complejidad de tiempo del algoritmo de Dijkstra en este caso sería O((121 * 360) log 121) = O(481 log 121) ≈ O(481 * 7) = O(3367), que se reduce a O(n log n), donde n representa el tamaño del problema (número de celdas en el tablero).
-
-    La complejidad de dijkstra adaptada a MCTS depende de varios factores, como la profundidad del árbol, el número de simulaciones realizadas y la complejidad de las funciones de evaluación utilizadas.
-
-    Suponiendo que se realizan k simulaciones por cada nodo del árbol, y que la complejidad de la función de evaluación es O(f(n)), donde n es el tamaño del problema (número de celdas en el tablero), la complejidad de tiempo del MCTS sería O(k * b^d * f(n)), donde b es el factor de ramificación (número máximo de jugadas posibles desde un nodo) y d es la profundidad máxima del árbol.
-=======
->>>>>>> 606f44fab260d203ccbce9c0d244fd7cbbcffa12
 ### DisjointSet.py
 
 ```__init__()``` posee una complejidad de tiempo O(n) porque inicializa con el tamaño del tablero los diccionarios rank y parent. En este n vendría a ser el número de hexágonos que componen el tablero.
@@ -260,8 +290,6 @@ Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión p
 ```def get_largest_component(self, color)``` posee una complejidad de tiempo O(n) ya que llama a una funcion ```get_connected_components()``` que posee un bucle for
 
 Verifica si los nodos auxiliares rojos o azules están conectados, lo que indicaría que un jugador ha ganado el juego. Devuelve el color del jugador ganador o None si aún no hay ganador.
-<<<<<<< HEAD
-=======
 
 ### AIhard.py
 
@@ -282,7 +310,6 @@ Verifica si los nodos auxiliares rojos o azules están conectados, lo que indica
 ```_get_shortest_path(self, start, end``` posee una complejidad de tiempo de O(n^2) donde n es el numeor de celdas en el tablero ya que utiliza un algoritmo de BFS para encontrar el camino más corto entre dos puntos del tablero.
 
 ```_update_game_state(self, move)``` tiene una complejidad de tiempo O(1) ya que es de tiempo constante
->>>>>>> 606f44fab260d203ccbce9c0d244fd7cbbcffa12
 
 ## Validación de datos y pruebas
 

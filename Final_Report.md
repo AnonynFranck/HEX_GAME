@@ -187,7 +187,9 @@ El juego Hex se presta naturalmente a una representación mediante grafos, lo cu
 
 
 ## Propuesta
+
 El objetivo principal de esta propuesta es desarrollar, implementar y analizar estrategias eficientes para bots que jueguen al Hex, un juego de estrategia de conexión. Se busca crear bots que puedan tomar decisiones inteligentes, anticipar movimientos del oponente y establecer conexiones efectivas en el tablero donde se detallara cual sera la intension de cada uno de las fichas.
+
 ### Técnicas y Metodologías Utilizadas:
 
 #### Estructura de Datos Disjoint Set:
@@ -272,45 +274,37 @@ Mediante un bucle ```while``` que ocurre hasta que la cola esté vacía, en cada
 
 ### DisjointSet.py
 
-```__init__()``` posee una complejidad de tiempo O(n) porque inicializa con el tamaño del tablero los diccionarios rank y parent. En este n vendría a ser el número de hexágonos que componen el tablero.
-
-Inicializa la estructura de datos del conjunto disjunto. Crea dos diccionarios, parent y rank, para cada nodo en el tablero. También crea nodos auxiliares para representar los bordes del tablero. 
-
-```find()``` posee una complejidad O(a(n)) porque es constante en todos los valores practicos de n.
+```find()``` posee una complejidad O(k) 
 
 Toma un nodo como entrada y devuelve el representante de su conjunto. Utiliza la técnica de compresión de caminos para optimizar futuras búsquedas.
 
-```union()``` posee una complejidad O(a(n)) porque llama a la funcion ```find()``` dos veces
+```union()``` posee una complejidad O(1)
 
 Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión por rango para mantener el árbol de conjuntos disjuntos equilibrado.
 
-```check_win()``` posee una complejidad O(1) porque solo realiza operaciones constantes
+```check_win()``` posee una complejidad O(1+k) 
 
-```def get_connected_components(self, color)``` posee una complejidad de tiempo O(n) porque tiene un bucle for que recorre las celdas del tablero
+```def get_connected_components(self, color)``` posee una complejidad de tiempo O(n^2)
 
-```def get_largest_component(self, color)``` posee una complejidad de tiempo O(n) ya que llama a una funcion ```get_connected_components()``` que posee un bucle for
-
-Verifica si los nodos auxiliares rojos o azules están conectados, lo que indicaría que un jugador ha ganado el juego. Devuelve el color del jugador ganador o None si aún no hay ganador.
+```def get_largest_component(self, color)``` posee una complejidad de tiempo O(1)
 
 ### AIhard.py
 
-```__init__(self, game)``` posee una complejidad de tiempo O(n) donde n es el numero de celdas en el tablero
+```_get_valid_moves(self)``` posee una complejidad de tiempo de O(n^2) 
 
-```get_NodesR(self)``` posee una complejidad de tiempo O(1) debido a que solo devuelve el valor de un atributo de la instancia de clase
+```make_move(self)``` tiene una complejidad de tiempo O(n^2) 
 
-```_get_valid_moves(self)``` posee una complejidad de tiempo de O(n) donde n es el numero de celdas en el tablero
+```_get_best_move(self)``` posee una complejidad de tiempo O(m*n^2+n^2) 
 
-```print_board(self)``` posee una complejidad de tiempo O(n) debido a que recorre todas las celdas del tablero en un bucle anidado 
+```_get_shortest_path(self, start, end``` posee una complejidad de tiempo O(n*m)
 
-```_create_adj_map(self)``` posee una complejidad de tiempo O(n) donde n es el número de celdas en el tablero debido a que recorre las celdas del tablero en un bucle 
+### Renderer.py
 
-```make_move(self)``` tiene una complejidad de tiempo O(n^2) debido a que se llama a la funcion _get_best_move() que a su vez llama a la funcion _get_shortest_path()  la cual tiene una complejidad de tiempo O(n^2) ya que utiliza un algoritmo BFS
+```def get_neighbors()``` posee una complejidad de tiempo O(n)
 
-```_get_best_move(self)``` posee una complejidad de tiempo O(n^2) debido a que se llama a la funcion _get_shortest_path() que tiene una complejidad de tiempo O(n^2)
+```def render_hex_map()``` posee una complejidad de tiempo O(n^2)
 
-```_get_shortest_path(self, start, end``` posee una complejidad de tiempo de O(n^2) donde n es el numeor de celdas en el tablero ya que utiliza un algoritmo de BFS para encontrar el camino más corto entre dos puntos del tablero.
-
-```_update_game_state(self, move)``` tiene una complejidad de tiempo O(1) ya que es de tiempo constante
+```def run()```
 
 ## Validación de datos y pruebas
 

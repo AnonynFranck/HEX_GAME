@@ -84,7 +84,6 @@ Los datos se generan en cuanto uno de los bots realiza un movimiento durante la 
 ### Motivo del Análisis
 
 
-Hallar la probabilidad de que el bot gane el juego en base a las jugadas que realiza y las posibles jugadas. Además, se busca analizar la eficiencia del algoritmo de Dijkstra en la búsqueda de la ruta más corta entre las fichas del bot y cómo se puede combinar con un árbol de decisiones para tomar decisiones estratégicas en el juego Hex.
 
 
 ### Relacion con grafos

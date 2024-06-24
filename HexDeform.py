@@ -27,6 +27,10 @@ class Renderer:
         self.render = self.render_hex_map
         self.winner_written = False
 
+        self.execution_times_red = []
+        self.execution_times_blue = []
+        self.written_to_file = False
+
         self.empty_node_gfx = create_graphic(None)
         self.start_node_gfx = create_graphic(self.START_HEX_COLOR)
         self.node_gfx_blue = create_graphic(self.START_HEX_COLOR_BLUE)
@@ -265,7 +269,15 @@ class Renderer:
 
             self.winner = self.disjoint_set.check_win()
             if self.winner:
-                print(f"El jugador {self.winner} ha ganado!")
+                if not self.written_to_file:
+                    avg_time_red = sum(self.execution_times_red) / len(self.execution_times_red)
+                    avg_time_blue = sum(self.execution_times_blue) / len(self.execution_times_blue)
+                    with open('average_times.txt', 'a') as f:
+                        f.write(
+                            f"Promedio de tiempo de ejecucion de ai_playerRed.make_move(): {avg_time_red} nano segundos\n")
+                        f.write(
+                            f"Promedio de tiempo de ejecucion de ai_playerBlue.make_move(): {avg_time_blue} nano segundos\n")
+                    self.written_to_file = True
 
     def print_player_positions(self):
         print("Posiciones del jugador rojo:")
@@ -299,10 +311,20 @@ class Renderer:
             elif self.difficulty == "Bot(Blue) vs Bot(Red)":
                 if self.current_player == "red":
                     time.sleep(0.3)
+                    start_time_red = time.time_ns()
                     self.ai_playerRed.make_move()
+                    end_time_red = time.time_ns()
+                    execution_time_red = end_time_red - start_time_red
+                    self.execution_times_red.append(execution_time_red)
+                    print(f"Tiempo de ejecución de ai_playerRed.make_move(): {execution_time_red} nano segundos")
                 elif self.current_player == "blue":
                     time.sleep(0.3)
+                    start_time_blue = time.time_ns()
                     self.ai_playerBlue.make_move()
+                    end_time_blue = time.time_ns()
+                    execution_time_blue = end_time_blue - start_time_blue
+                    self.execution_times_blue.append(execution_time_blue)
+                    print(f"Tiempo de ejecución de ai_playerBlue.make_move(): {execution_time_blue} nano segundos")
             # Show map and print position of the players
             self.render_hex_map(path_blue, path_red)
             # self.print_player_positions()

@@ -399,6 +399,8 @@ Seleccionar el movimiento más avanzado: $O(m)$
 |       1.548 |       0.046 |
 
 *Nota: Solo se considero los tiempo que eran mayor a cero para el azul, ya que mayormente daba cero.*
+
+**[Demostraciones](https://github.com/AnonynFranck/HEX_GAME/tree/main/source)**
 ## Conclusiones
 El experimento reveló que el algoritmo greedy implementado para el jugador azul en el juego Hex demostró ser superior tanto en eficacia como en eficiencia computacional. Con una mayor tasa de victoria y tiempos de ejecución significativamente menores _(frecuentemente cercanos a cero)_ en comparación con el algoritmo del jugador rojo, el enfoque greedy se posiciona como una estrategia altamente efectiva para este juego. Esta combinación de alto rendimiento y baja complejidad computacional sugiere que estrategias aparentemente simples, cuando están bien diseñadas y adaptadas al contexto específico del juego, pueden superar a enfoques más complejos. La eficacia del algoritmo greedy en bloquear al oponente mientras avanza hacia su objetivo demuestra la importancia de balancear tácticas defensivas y ofensivas en juegos de conexión como Hex. Para futuras investigaciones, sería valioso explorar la escalabilidad de este enfoque en tableros de mayor tamaño, investigar la integración de técnicas de aprendizaje por refuerzo para mejorar la toma de decisiones, y examinar cómo el algoritmo se comportaría contra jugadores humanos expertos o contra otros algoritmos de IA más avanzados, como los basados en redes neuronales o búsqueda de Monte Carlo.
 ## Bibliografía

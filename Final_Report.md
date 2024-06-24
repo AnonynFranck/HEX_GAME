@@ -63,6 +63,8 @@ Aunque nuestro enfoque principal no será la implementación completa del algori
 
 
 ## Descripción del Conjunto de Datos
+
+### Análisis Teórico del Espacio de Decisiones
 En este proyecto, al utilizar el algoritmo de Dijkstra en conjunto con un árbol de decisiones, podemos estimar el número de posibles resultados o nodos en el árbol de decisiones de la siguiente manera:
 
 * Primero, debemos considerar que el tablero de Hex tiene un tamaño de 11x11, lo que significa que hay un total de $121$ celdas o nodos en el grafo.
@@ -79,13 +81,57 @@ Por lo tanto, en el peor de los casos, el árbol de decisiones podría tener un 
 Sin embargo, es importante tener en cuenta que este cálculo asume que todas las jugadas son posibles y que no se consideran las reglas del juego Hex, que implican la formación de cadenas ininterrumpidas para conectar los lados opuestos.
 
 En la práctica, el número real de nodos en el árbol de decisiones será menor, ya que algunas jugadas serán descartadas por ser inválidas o poco prometedoras. Además, el uso del algoritmo de Dijkstra para encontrar la ruta más corta entre las fichas del bot, junto con la poda del árbol de decisiones basada en heurísticas y evaluaciones, reducirá aún más el tamaño efectivo del árbol de decisiones.
+### Metodología Estadística y Proceso de Muestreo
+
+Para evaluar el rendimiento de los bots en el juego Hex, se implementó un riguroso proceso de muestreo y análisis estadístico. El objetivo fue obtener una estimación confiable de la tasa de victoria de cada bot bajo diferentes condiciones de juego.
+
+#### Diseño del Muestreo
+
+Se realizaron tres conjuntos de simulaciones, cada uno con un número diferente de partidas:
+
+* 100 partidas
+
+* 500 partidas
+
+* 1000 partidas
+
+Cada partida se jugó hasta su conclusión, determinando un ganador claro (bot rojo o bot azul).
+
+#### Cálculo de la Tasa de Victoria
+
+Para cada conjunto de simulaciones, se calculó la tasa de victoria para cada bot utilizando la siguiente fórmula:
+
+$$\text{Tasa de Victoria} = \frac{\text{Número de Victorias}}{\text{Número Total de Partidas}} \times 100\%$$
+
+#### Análisis de la Media
+
+Para obtener una estimación más robusta del rendimiento general, se calculó la media de las tasas de victoria a través de los tres conjuntos de simulaciones:
+
+$$\text{Media de Tasa de Victoria} = \frac{\sum_{i=1}^{3} \text{Tasa de Victoria}_i}{3}$$
+
+donde $i$ representa cada conjunto de simulaciones (100, 500, y 1000 partidas).
+
+#### Justificación del Tamaño de Muestra
+
+La elección de realizar hasta 1000 partidas se basó en la necesidad de:
+> Reducir el margen de error en nuestras estimaciones.
+
+> Capturar una amplia variedad de escenarios de juego posibles.
+
+> Proporcionar suficientes datos para identificar patrones consistentes en el rendimiento de los bots.
+
+El incremento progresivo en el número de partidas (100, 500, 1000) nos permite también observar cómo la estabilidad de los resultados mejora con tamaños de muestra más grandes.
+
+#### Limitaciones
+
+Es importante notar que, aunque 1000 partidas proporcionan una muestra sustancial, este número sigue siendo pequeño en comparación con el número total de posibles configuraciones de juego en Hex. Por lo tanto, nuestros resultados deben interpretarse como una aproximación del rendimiento real de los bots, sujeta a cierto margen de error.
 
 ### Origen de los Datos
 
 Los datos se generan durante el transcurso de las partidas de Hex en un tablero de $11$ X $11$, donde se enfrentan dos bots con estrategias distintas:
 
-## `Bot Rojo (HardAIPlayer)`
-## `Bot Azul (GreedyBlueAIPlayer)`
+### `Bot Rojo (HardAIPlayer)`
+### `Bot Azul (GreedyBlueAIPlayer)`
 
 Los datos se generan y registran de la siguiente manera:
 

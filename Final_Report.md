@@ -58,7 +58,7 @@ En este proyecto, nos enfocaremos en el desarrollo de un bot (jugador rojo) que 
 Aunque nuestro enfoque principal no será la implementación completa del algoritmo de Monte Carlo Tree Search (MCTS), tomaremos algunas ideas y conceptos clave de este enfoque. Por ejemplo, utilizaremos simulaciones y rollouts para explorar las posibles jugadas y evaluar su efectividad, lo que contribuirá a mejorar la calidad y efectividad del bot en el juego. Por esa razon esta combinación de técnicas proporcionará al bot la capacidad de analizar el tablero de manera eficiente, simular movimientos potenciales y tomar decisiones estratégicas en cada turno, adaptándose a las jugadas del oponente y buscando la conexión ganadora óptima.
 
 <div align="center">
-  <img src="images/GR7qf.png" alt="MONTE CARLO TREE SEARCH"> /*width="200"*/>
+  <img src="images/GR7qf.png" alt="MONTE CARLO TREE SEARCH">>
 </div>
 
 
@@ -84,16 +84,8 @@ En la práctica, el número real de nodos en el árbol de decisiones será menor
 
 Los datos se generan durante el transcurso de las partidas de Hex en un tablero de $11$ X $11$, donde se enfrentan dos bots con estrategias distintas:
 
-**Bot Rojo (HardAIPlayer):**
-
-    Utiliza una combinación de algoritmos de búsqueda de caminos (como BFS) de tal forma que, en cada turno, evalúa múltiples rutas posibles y selecciona la que considera óptima. Por esa razon, su objetivo es crear un camino continuo de fichas rojas que conecte los bordes superior e inferior del tablero.
-
-
-**Bot Azul (GreedyBlueAIPlayer):**
-
-    Emplea una estrategia codiciosa (greedy) enfocada principalmente en bloquear al jugador rojo. Para ello se implemento un sistema de componentes conectados para identificar y obstruir los caminos potenciales del oponente, teniendo en cuenta que mientras bloquea buscará avanzar hacia su propio objetivo de conectar los bordes izquierdo y derecho del tablero.
-
-
+## `Bot Rojo (HardAIPlayer)`
+## `Bot Azul (GreedyBlueAIPlayer)`
 
 Los datos se generan y registran de la siguiente manera:
 
@@ -182,7 +174,7 @@ El juego Hex se presta naturalmente a una representación mediante grafos, lo cu
   Los algoritmos empleados por los bots pueden interpretarse como problemas de optimización de rutas en grafos. Buscan el camino más eficiente para conectar sus bordes objetivo, considerando no solo la longitud del camino sino también su resistencia a los bloqueos del oponente, lo que añade una dimensión estratégica adicional al análisis del juego. Es por ello que se hizo la implemantacion de recorrido BFS con apertura de fuerza bruta para la evaluacion de los posibles caminos.
 
 <div align="center">
-  <img src="images/hex_graph.png" alt="HEX GRAPH"> /*width="200"/*>
+  <img src="images/hex_graph.png" alt="HEX GRAPH">
 </div>
 
 
@@ -256,11 +248,11 @@ Se realizarán múltiples partidas entre los bots para recopilar datos sobre sus
 * Se agregó también nuevas funciones como ```def get_connected_components(self, color)``` que obtiene los caminos del bot rojo y ```def get_largest_component(self, color)``` obtiene el mas reciente componente que ha creado el algoritmo y determinar el componente más grande. Empleando el algoritmo de Kusaragi analizando los componentes de rojo facilitamos la busqueda de los caminos más cortos.
 
 
-También se ha utilizado un algoritmo DFS para detectar el camino más corto que se pueda crear y que conecte a los extremos de cada lado del tablero.
+* También se ha utilizado un algoritmo DFS para detectar el camino más corto que se pueda crear y que conecte a los extremos de cada lado del tablero.
 
-La funcion que utiliza este algoritmo es ```_get_shortest_path(self, start, end)``` que recibe como parametros el nodo de inicio y fin el cual luego es almacenado en una cola ```queue``` que sirve para almacenar vértices a visitar y visited que es un conjunto que se utiliza para almacenar los vértices que ya han sido visitados. 
+* La funcion que utiliza este algoritmo es ```_get_shortest_path(self, start, end)``` que recibe como parametros el nodo de inicio y fin el cual luego es almacenado en una cola ```queue``` que sirve para almacenar vértices a visitar y visited que es un conjunto que se utiliza para almacenar los vértices que ya han sido visitados. 
 
-Mediante un bucle ```while``` que ocurre hasta que la cola esté vacía, en cada iteración del bucle se toma un vértice de la cola y se explora. Si el vértice es el vértice final se vuelve el camino hasta dicho vertice, caso contrario se agregan los vertices no visitados de la cola para explorarlos en las iteraciones posteriores
+* Mediante un bucle ```while``` que ocurre hasta que la cola esté vacía, en cada iteración del bucle se toma un vértice de la cola y se explora. Si el vértice es el vértice final se vuelve el camino hasta dicho vertice, caso contrario se agregan los vertices no visitados de la cola para explorarlos en las iteraciones posteriores
 
 ### Analisis de complejidad
 
@@ -313,7 +305,14 @@ Toma dos nodos como entrada y une sus conjuntos. Utiliza la técnica de unión p
     <a href="https://docs.google.com/spreadsheets/d/1aukxchH79EYdNzJKLk0XQ3KdyHOFFYE3O7KxIXU3Rj8/edit?gid=0#gid=0">Dataset</a>
 </p>
 
+**Tabla 1: Resultados de victorias por número de partidas y media**
 
+| Jugador | Caso 100 | Caso 500 | Caso 1000 | Media |
+|---------|----------|----------|-----------|-------|
+| Rojo    | 21       | 87       | 172       | 93.3  |
+| Azul    | 79       | 413      | 828       | 440.0 |
+
+*Nota: La media se calculó sobre los tres casos presentados.*
 
 ## Conclusiones
 

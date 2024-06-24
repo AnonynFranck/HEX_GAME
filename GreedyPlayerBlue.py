@@ -9,7 +9,7 @@ class GreedyBlueAIPlayer:
 
     def make_move(self):
         if self.game.current_player == "blue" and not self.game.winner:
-            move = self._get_best_move()
+            move = self._get_best_move() # Best Move
             print("MOVE: ", move)
             if move and move not in self.game.occupied_positions:
                 self.game.handle_mouse_click(self.game.convert_hex_to_pixel_coords(*move))

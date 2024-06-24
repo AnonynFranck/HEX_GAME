@@ -1,0 +1,10 @@
+Promedio de tiempo de ejecucion de ai_playerRed.make_move(): 1510940.9090909092 nano segundos
+Promedio de tiempo de ejecucion de ai_playerBlue.make_move(): 47580.95238095238 nano segundos
+Promedio de tiempo de ejecucion de ai_playerRed.make_move(): 1271004.081632653 nano segundos
+Promedio de tiempo de ejecucion de ai_playerBlue.make_move(): 153051.02040816325 nano segundos
+Promedio de tiempo de ejecucion de ai_playerRed.make_move(): 1880223.8095238095 nano segundos
+Promedio de tiempo de ejecucion de ai_playerBlue.make_move(): 150380.0 nano segundos
+Promedio de tiempo de ejecucion de ai_playerRed.make_move(): 3550102.1739130435 nano segundos
+Promedio de tiempo de ejecucion de ai_playerBlue.make_move(): 78024.44444444444 nano segundos
+Promedio de tiempo de ejecucion de ai_playerRed.make_move(): 1547660.8695652173 nano segundos
+Promedio de tiempo de ejecucion de ai_playerBlue.make_move(): 45790.90909090909 nano segundos

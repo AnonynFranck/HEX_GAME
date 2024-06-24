@@ -38,12 +38,24 @@ Carnaval Sánchez, Luis Martin
     - [Descripción](#descripción)
     - [Fundamentación del Problema](#fundamentación-del-problema)
 2. [Descripción del Conjunto de Datos](#descripción-del-conjunto-de-datos)
-    - [Origen de los Datos](#origen-de-los-datos)
-    - [Motivo del Análisis](#motivo-del-análisis)
+    - [Análisis Teórico del Espacio de Decisiones](#análisis-teórico-del-espaci-de-decisiones)
+    - [Metodología Estadística y Proceso de Muestreo](#eetodología-estadística-y-proceso-de-muestreo)
     - [Relacion con grafos](#relacion-con-grafos)
+    - [Motivo del Análisis](#motivo-del-motivo-del-análisis)
 3. [Propuesta](#propuesta)
+    - [Técnicas y Metodologías Utilizadas]()
+      - [Estructura de Datos Disjoint Set](estructura-de-datos-disjoint-set)
+      - [Bot Rojo (HardAIPlayer)]()
+      - [Bot Azul (GreedyBlueAIPlayer)]()
+      - [Detección de Victoria]()
+      - [Análisis de Componentes Conectados]()
+      - [Metodología de Evaluación]()
+      - [Resultados Esperados]()
 4. [Diseño del aplicativo](#diseño-del-aplicativo)
+    - [Análisis de complejidad](análisis-de-complejidad)
 5. [Validación de datos y pruebas](#validación-de-datos-y-pruebas)
+    - [Tasa de victorias por partida](tasa-de-victorias-por-partida)
+    - [Tiempo de ejecucion de ambos Algoritmos](tiempo-de-ejecucion-de-ambos-algoritmos)
 6. [Conclusiones](#conclusiones)
 7. [Bibliografía](#bibliografía)
 
@@ -300,7 +312,7 @@ Se realizarán múltiples partidas entre los bots para recopilar datos sobre sus
 
 * Mediante un bucle ```while``` que ocurre hasta que la cola esté vacía, en cada iteración del bucle se toma un vértice de la cola y se explora. Si el vértice es el vértice final se vuelve el camino hasta dicho vertice, caso contrario se agregan los vertices no visitados de la cola para explorarlos en las iteraciones posteriores
 
-### Analisis de complejidad
+### Análisis de complejidad
 
 ```render_hex_map()``` posee una complejidad de tiempo $O(n^2)$ porque tiene dos bucles anidados que recorren ancho y alto del tablero.
 
